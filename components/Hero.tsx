@@ -52,6 +52,14 @@ export default async function Hero() {
   const displayAvatars = rawAvatars.slice(0, 5);
   const extraCount = rawAvatars.length > 5 ? rawAvatars.length - 5 : 0;
 
+  const bgImage =
+    typeof data?.backgroundImage === "object" &&
+    data.backgroundImage &&
+    "url" in data.backgroundImage &&
+    typeof data.backgroundImage.url === "string"
+      ? data.backgroundImage.url
+      : "https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp";
+
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden justify-end">
       {/* Warm orange gradient background */}
@@ -81,7 +89,7 @@ export default async function Hero() {
       <div
         className="absolute inset-y-0 right-[-5%] w-[70%] md:w-[65%] transition-transform duration-700 ease-out hover:scale-[1.03]"
         style={{
-          backgroundImage: `url(https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp)`,
+          backgroundImage: `url(${bgImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center left",
           opacity: 0.95,

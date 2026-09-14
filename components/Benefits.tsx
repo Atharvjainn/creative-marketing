@@ -34,6 +34,14 @@ export default async function Benefits() {
         }))
       : defaultStats;
 
+  const bgImage =
+    typeof data?.backgroundImage === "object" &&
+    data.backgroundImage &&
+    "url" in data.backgroundImage &&
+    typeof data.backgroundImage.url === "string"
+      ? data.backgroundImage.url
+      : "https://files.peachworlds.com/website/969dfc0e-13eb-475b-8459-6d8e44a15e0a/chatgpt-image-jun-15-2026-09-05-41-pm.webp";
+
   return (
     <section className="relative overflow-hidden py-20 md:py-28">
       {/* Warm orange gradient background */}
@@ -49,7 +57,7 @@ export default async function Benefits() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `url(https://files.peachworlds.com/website/969dfc0e-13eb-475b-8459-6d8e44a15e0a/chatgpt-image-jun-15-2026-09-05-41-pm.webp)`,
+          backgroundImage: `url(${bgImage})`,
           backgroundSize: "65%",
           backgroundPosition: "62% center",
           backgroundRepeat: "no-repeat",

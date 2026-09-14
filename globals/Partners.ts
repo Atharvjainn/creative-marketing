@@ -34,5 +34,13 @@ export const Partners: GlobalConfig = {
                 },
             ],
         },
+        {
+            name: 'backgroundImage',
+            type: 'upload',
+            relationTo: 'media',
+            admin: {
+                description: 'Custom background disc overlay (optional)',
+            },
+        },
     ],
 }

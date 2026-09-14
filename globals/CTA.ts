@@ -47,5 +47,13 @@ export const CTA: GlobalConfig = {
             name: 'email',
             type: 'email',
         },
+        {
+            name: 'backgroundImage',
+            type: 'upload',
+            relationTo: 'media',
+            admin: {
+                description: 'Custom full-height background image (optional)',
+            },
+        },
     ],
 }

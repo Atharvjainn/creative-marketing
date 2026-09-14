@@ -65,5 +65,13 @@ export const Hero: GlobalConfig = {
                 },
             ],
         },
+        {
+            name: 'backgroundImage',
+            type: 'upload',
+            relationTo: 'media',
+            admin: {
+                description: 'Custom background glowing disc visual (optional)',
+            },
+        },
     ],
 }

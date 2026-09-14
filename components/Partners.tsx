@@ -46,6 +46,14 @@ export default async function Partners() {
   // Duplicate the partner array to create a seamless infinite marquee loop
   const marqueeItems = [...partners, ...partners];
 
+  const bgImage =
+    typeof data?.backgroundImage === "object" &&
+    data.backgroundImage &&
+    "url" in data.backgroundImage &&
+    typeof data.backgroundImage.url === "string"
+      ? data.backgroundImage.url
+      : "https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp";
+
   return (
     <section className="relative overflow-hidden py-20 md:py-28">
       {/* Uniform light peach base */}
@@ -58,7 +66,7 @@ export default async function Partners() {
       <div
         className="absolute inset-y-0 right-0 w-[55%]"
         style={{
-          backgroundImage: `url(https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp)`,
+          backgroundImage: `url(${bgImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center left",
           opacity: 0.9,

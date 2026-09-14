@@ -44,5 +44,13 @@ export const BusinessSolutions: GlobalConfig = {
                 },
             ],
         },
+        {
+            name: 'backgroundImage',
+            type: 'upload',
+            relationTo: 'media',
+            admin: {
+                description: 'Custom left-side abstract disc overlay visual (optional)',
+            },
+        },
     ],
 }

@@ -31,6 +31,22 @@ export default async function Solutions() {
     url: "#",
   };
 
+  const bgImage =
+    typeof data?.backgroundImage === "object" &&
+    data.backgroundImage &&
+    "url" in data.backgroundImage &&
+    typeof data.backgroundImage.url === "string"
+      ? data.backgroundImage.url
+      : "https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp";
+
+  const dashImage =
+    typeof data?.dashboardImage === "object" &&
+    data.dashboardImage &&
+    "url" in data.dashboardImage &&
+    typeof data.dashboardImage.url === "string"
+      ? data.dashboardImage.url
+      : "https://files.peachworlds.com/website/2f46c3a8-f9be-44cf-b56b-5a631f4fa3f7/dash.png";
+
   return (
     <section id="solutions" className="relative overflow-hidden pt-12">
       {/* Orange gradient background */}
@@ -46,8 +62,7 @@ export default async function Solutions() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage:
-            "url(https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp)",
+          backgroundImage: `url(${bgImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           opacity: 0.85,
@@ -129,7 +144,7 @@ export default async function Solutions() {
 
             <div className="overflow-hidden">
               <Image
-                src="https://files.peachworlds.com/website/2f46c3a8-f9be-44cf-b56b-5a631f4fa3f7/dash.png"
+                src={dashImage}
                 alt="Marketing Dashboard"
                 width={1280}
                 height={720}

@@ -54,5 +54,21 @@ export const Solutions: GlobalConfig = {
                 },
             ],
         },
+        {
+            name: 'backgroundImage',
+            type: 'upload',
+            relationTo: 'media',
+            admin: {
+                description: 'Custom background disc overlay (optional)',
+            },
+        },
+        {
+            name: 'dashboardImage',
+            type: 'upload',
+            relationTo: 'media',
+            admin: {
+                description: 'Dashboard mockup screenshot inside the browser frame (optional)',
+            },
+        },
     ],
 }

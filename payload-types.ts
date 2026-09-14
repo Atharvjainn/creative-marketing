@@ -552,6 +552,14 @@ export interface Solution {
     label: string;
     url: string;
   };
+  /**
+   * Custom background disc overlay (optional)
+   */
+  backgroundImage?: (number | null) | Media;
+  /**
+   * Dashboard mockup screenshot inside the browser frame (optional)
+   */
+  dashboardImage?: (number | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -586,6 +594,10 @@ export interface Hero {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Custom background glowing disc visual (optional)
+   */
+  backgroundImage?: (number | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -612,6 +624,10 @@ export interface Partner {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Custom background disc overlay (optional)
+   */
+  backgroundImage?: (number | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -703,6 +719,10 @@ export interface BusinessSolution {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Custom left-side abstract disc overlay visual (optional)
+   */
+  backgroundImage?: (number | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -729,6 +749,10 @@ export interface Benefit {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Custom background disc overlay behind statistics (optional)
+   */
+  backgroundImage?: (number | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -823,6 +847,10 @@ export interface Cta {
     url: string;
   };
   email?: string | null;
+  /**
+   * Custom full-height background image (optional)
+   */
+  backgroundImage?: (number | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -909,6 +937,8 @@ export interface SolutionsSelect<T extends boolean = true> {
         label?: T;
         url?: T;
       };
+  backgroundImage?: T;
+  dashboardImage?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -941,6 +971,7 @@ export interface HeroSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  backgroundImage?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -961,6 +992,7 @@ export interface PartnersSelect<T extends boolean = true> {
         logo?: T;
         id?: T;
       };
+  backgroundImage?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1036,6 +1068,7 @@ export interface BusinessSolutionsSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  backgroundImage?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1056,6 +1089,7 @@ export interface BenefitsSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  backgroundImage?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1138,6 +1172,7 @@ export interface CtaSelect<T extends boolean = true> {
         url?: T;
       };
   email?: T;
+  backgroundImage?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

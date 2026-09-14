@@ -36,6 +36,8 @@ export default async function CTA() {
       : null,
   ]);
 
+  const animDir = (ctaData?.animationDirection as "up" | "down" | "left" | "right" | "zoom" | "none") || "up";
+
   const heading =
     ctaData?.heading || "Grow with us.\nStart your journey today.";
 
@@ -48,6 +50,14 @@ export default async function CTA() {
     label: "Learn More",
     url: "#",
   };
+
+  const bgImage =
+    typeof ctaData?.backgroundImage === "object" &&
+    ctaData.backgroundImage &&
+    "url" in ctaData.backgroundImage &&
+    typeof ctaData.backgroundImage.url === "string"
+      ? ctaData.backgroundImage.url
+      : "https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp";
 
   // Dynamic Footer Data from 'footer' CMS Global
   const brandName = footerData?.brandName || "Creative Marketing Agency";
@@ -79,7 +89,7 @@ export default async function CTA() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `url(https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp)`,
+          backgroundImage: `url(${bgImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -102,7 +112,7 @@ export default async function CTA() {
         {/* CTA text (can be hidden from CMS) */}
         {ctaData?.enabled !== false && (
           <div className="max-w-[1320px] mx-auto w-full px-6 sm:px-12 pt-28 sm:pt-40">
-            <Reveal direction="up" delay={50}>
+            <Reveal direction={animDir} delay={50}>
               <h2
                 className="text-white font-medium mb-10 whitespace-pre-line tracking-tight drop-shadow-md"
                 style={{ fontSize: "clamp(40px, 6vw, 80px)", lineHeight: 1 }}
@@ -110,7 +120,7 @@ export default async function CTA() {
                 {heading}
               </h2>
             </Reveal>
-            <Reveal direction="up" delay={150}>
+            <Reveal direction={animDir} delay={150}>
               <div className="flex flex-wrap items-center gap-4">
                 <a
                   href={primaryButton.url}

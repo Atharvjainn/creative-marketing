@@ -33,5 +33,13 @@ export const Benefits: GlobalConfig = {
                 },
             ],
         },
+        {
+            name: 'backgroundImage',
+            type: 'upload',
+            relationTo: 'media',
+            admin: {
+                description: 'Custom background disc overlay behind statistics (optional)',
+            },
+        },
     ],
 }
