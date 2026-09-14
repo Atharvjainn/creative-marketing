@@ -1,20 +1,42 @@
-"use client";
+import { getPayloadClient } from "@/lib/payload";
 
-const stats = [
+const defaultStats = [
   { value: "+48%", label: "Conversion Boost" },
   { value: "-21%", label: "Cost Reduction" },
   { value: "10K+", label: "Happy Clients" },
   { value: "21+", label: "Years of Expertise" },
 ];
 
-export default function Benefits() {
+export default async function Benefits() {
+  // Fetch the "Benefits" global directly from Payload
+  const data = await getPayloadClient()
+    .then((payload) => payload.findGlobal({ slug: "benefits" }))
+    .catch((err) => {
+      console.error("Failed to load 'benefits' global from Payload:", err);
+      return null;
+    });
+
+  const eyebrow = data?.eyebrow || "BENEFITS";
+  const heading =
+    data?.heading ||
+    "Efficient. Scalable.\nInnovative.\nWelcome to Creative\nMarketing Agency.";
+
+  const stats =
+    data?.stats && data.stats.length > 0
+      ? data.stats.map((s, index) => ({
+          value: s.value || defaultStats[index % defaultStats.length].value,
+          label: s.label || defaultStats[index % defaultStats.length].label,
+        }))
+      : defaultStats;
+
   return (
     <section className="relative overflow-hidden py-20 md:py-28">
       {/* Warm orange gradient background */}
       <div
         className="absolute inset-0"
         style={{
-          background: "radial-gradient(ellipse at 55% 50%, #C04010 0%, #8B2A06 35%, #3D0E00 65%, #0D0100 100%)",
+          background:
+            "radial-gradient(ellipse at 55% 50%, #C04010 0%, #8B2A06 35%, #3D0E00 65%, #0D0100 100%)",
         }}
       />
 
@@ -34,15 +56,12 @@ export default function Benefits() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left text */}
           <div>
-            <p className="section-label text-white/60 mb-6">BENEFITS</p>
+            <p className="section-label text-white/60 mb-6">{eyebrow}</p>
             <h2
-              className="text-white font-medium leading-tight"
+              className="text-white font-medium leading-tight whitespace-pre-line"
               style={{ fontSize: "clamp(32px, 4vw, 56px)" }}
             >
-              Efficient. Scalable.<br />
-              Innovative.<br />
-              Welcome to Creative<br />
-              Marketing Agency.
+              {heading}
             </h2>
           </div>
 
@@ -50,7 +69,7 @@ export default function Benefits() {
           <div className="grid grid-cols-1 gap-3">
             {stats.map((stat, index) => (
               <div
-                key={stat.label}
+                key={`${stat.label}-${index}`}
                 className="rounded-2xl px-8 py-6"
                 style={
                   index === 0

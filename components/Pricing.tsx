@@ -1,6 +1,6 @@
-"use client";
+import { getPayloadClient } from "@/lib/payload";
 
-const plans = [
+const defaultPlans = [
   {
     name: "Starter",
     tagline: "Ideal for individual marketers or small teams.",
@@ -13,7 +13,7 @@ const plans = [
       "Task creation & management",
       "Real-time reporting",
     ],
-    cta: "Sign Up",
+    cta: { label: "Sign Up", url: "#" },
   },
   {
     name: "Professional",
@@ -27,7 +27,7 @@ const plans = [
       "Real-time reporting",
       "AI content suggestions",
     ],
-    cta: "Contact Sales",
+    cta: { label: "Contact Sales", url: "#" },
   },
   {
     name: "Enterprise",
@@ -41,22 +41,57 @@ const plans = [
       "Dedicated account manager",
       "Priority support",
     ],
-    cta: "Contact Sales",
+    cta: { label: "Contact Sales", url: "#" },
   },
 ];
 
-export default function Pricing() {
+export default async function Pricing() {
+  // Fetch the "Pricing" global directly from Payload
+  const data = await getPayloadClient()
+    .then((payload) => payload.findGlobal({ slug: "pricing" }))
+    .catch((err) => {
+      console.error("Failed to load 'pricing' global from Payload:", err);
+      return null;
+    });
+
+  const eyebrow = data?.eyebrow || "PRICING";
+  const heading = data?.heading || "Flexible plans for every team.";
+
+  const plans =
+    data?.plans && data.plans.length > 0
+      ? data.plans.map((p, index) => {
+          const defaultPlan = defaultPlans[index % defaultPlans.length];
+          const featuresList =
+            p.features && p.features.length > 0
+              ? p.features.map((f) => f.feature).filter(Boolean)
+              : defaultPlan.features;
+
+          return {
+            name: p.name || defaultPlan.name,
+            tagline: p.tagline || defaultPlan.tagline,
+            price: p.price || defaultPlan.price,
+            period: p.period || defaultPlan.period,
+            highlight: Boolean(p.highlight),
+            features: featuresList,
+            cta: {
+              label: p.cta?.label || defaultPlan.cta.label,
+              url: p.cta?.url || defaultPlan.cta.url,
+            },
+          };
+        })
+      : defaultPlans;
+
   return (
     <section id="pricing" className="bg-black py-24 md:py-32">
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="section-label text-white/40 mb-4">PRICING</p>
+          <p className="section-label text-white/40 mb-4">{eyebrow}</p>
           <h2
-            className="text-white font-medium"
+            className="text-white font-medium whitespace-pre-line"
             style={{ fontSize: "clamp(36px, 5vw, 64px)", lineHeight: 1.05 }}
           >
-            Flexible plans for every team.
+            {heading}
           </h2>
         </div>
 
@@ -108,7 +143,7 @@ export default function Pricing() {
 
               {/* CTA */}
               <a
-                href="#"
+                href={plan.cta.url}
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full text-[14px] font-medium transition-all duration-200"
                 style={
                   plan.highlight
@@ -116,7 +151,7 @@ export default function Pricing() {
                     : { background: "rgba(255,255,255,0.06)", color: "#fff", border: "1px solid rgba(255,255,255,0.1)" }
                 }
               >
-                {plan.cta}
+                {plan.cta.label}
                 <span
                   className="w-5 h-5 rounded-full flex items-center justify-center text-xs"
                   style={plan.highlight ? { background: "#000", color: "#fff" } : { background: "rgba(255,255,255,0.15)", color: "#fff" }}

@@ -1,6 +1,29 @@
-"use client";
+import { getPayloadClient } from "@/lib/payload";
 
-export default function CTA() {
+export default async function CTA() {
+  // Fetch the "CTA" global directly from Payload
+  const data = await getPayloadClient()
+    .then((payload) => payload.findGlobal({ slug: "cta" }))
+    .catch((err) => {
+      console.error("Failed to load 'cta' global from Payload:", err);
+      return null;
+    });
+
+  const heading =
+    data?.heading || "Grow with us.\nStart your journey today.";
+
+  const primaryButton = data?.primaryButton || {
+    label: "Get Started",
+    url: "#",
+  };
+
+  const secondaryButton = data?.secondaryButton || {
+    label: "Learn More",
+    url: "#",
+  };
+
+  const email = data?.email || "contact@creativemarketing.com";
+
   return (
     <section className="relative overflow-hidden" style={{ minHeight: "90vh" }}>
       {/* Full background: disc/petri dish image — warm peach/cream tones match original CTA */}
@@ -30,25 +53,24 @@ export default function CTA() {
         {/* CTA text */}
         <div className="max-w-[1320px] mx-auto w-full" style={{ paddingLeft: "48px", paddingRight: "48px", paddingTop: "160px" }}>
           <h2
-            className="text-white font-medium mb-10"
+            className="text-white font-medium mb-10 whitespace-pre-line"
             style={{ fontSize: "clamp(40px, 6vw, 80px)", lineHeight: 1 }}
           >
-            Grow with us.<br />
-            Start your journey today.
+            {heading}
           </h2>
           <div className="flex items-center gap-3">
             <a
-              href="#"
+              href={primaryButton.url}
               className="flex items-center gap-2 bg-black text-white px-7 py-3.5 rounded-full text-[14px] font-medium hover:bg-neutral-900 transition-colors"
             >
-              Get Started
+              {primaryButton.label}
               <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center text-black text-xs font-bold">›</span>
             </a>
             <a
-              href="#"
+              href={secondaryButton.url}
               className="flex items-center gap-2 bg-white/15 text-white px-7 py-3.5 rounded-full text-[14px] font-medium hover:bg-white/25 transition-colors backdrop-blur-sm"
             >
-              Learn More
+              {secondaryButton.label}
             </a>
           </div>
         </div>
@@ -59,7 +81,7 @@ export default function CTA() {
             {/* Brand */}
             <div>
               <p className="text-white font-semibold text-[18px] mb-1">Creative Marketing Agency</p>
-              <p className="text-white/55 text-[14px]">contact@creativemarketing.com</p>
+              <p className="text-white/55 text-[14px]">{email}</p>
             </div>
 
             {/* Menu + Socials */}

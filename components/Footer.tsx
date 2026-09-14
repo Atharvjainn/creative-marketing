@@ -1,19 +1,49 @@
-"use client";
+import { getPayloadClient } from "@/lib/payload";
 
-const menuLinks = [
+const defaultMenuLinks = [
   { label: "Solutions", href: "#solutions" },
   { label: "Features", href: "#features" },
   { label: "AI Power", href: "#ai-power" },
   { label: "Pricing", href: "#pricing" },
 ];
 
-const socialLinks = [
+const defaultSocialLinks = [
   { label: "Instagram", href: "#" },
   { label: "Linkedin", href: "#" },
   { label: "X", href: "#" },
 ];
 
-export default function Footer() {
+export default async function Footer() {
+  // Fetch the "Footer" global directly from Payload
+  const data = await getPayloadClient()
+    .then((payload) => payload.findGlobal({ slug: "footer" }))
+    .catch((err) => {
+      console.error("Failed to load 'footer' global from Payload:", err);
+      return null;
+    });
+
+  const brandName = data?.brandName || "Creative Marketing Agency";
+  const email = data?.email || "contact@creativemarketing.com";
+  const copyright =
+    data?.copyright ||
+    `© ${new Date().getFullYear()} Creative Marketing Agency. All rights reserved.`;
+
+  const menuLinks =
+    data?.menuLinks && data.menuLinks.length > 0
+      ? data.menuLinks.map((item) => ({
+          label: item.label,
+          href: item.url || "#",
+        }))
+      : defaultMenuLinks;
+
+  const socialLinks =
+    data?.socialLinks && data.socialLinks.length > 0
+      ? data.socialLinks.map((item) => ({
+          label: item.label,
+          href: item.url || "#",
+        }))
+      : defaultSocialLinks;
+
   return (
     <footer
       className="relative overflow-hidden py-16 md:py-20"
@@ -29,12 +59,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Brand */}
           <div>
-            <p className="text-white text-[15px] font-medium mb-2">Creative Marketing Agency</p>
+            <p className="text-white text-[15px] font-medium mb-2">{brandName}</p>
             <a
-              href="mailto:contact@creativemarketing.com"
+              href={`mailto:${email}`}
               className="text-white/50 text-[14px] hover:text-white/80 transition-colors"
             >
-              contact@creativemarketing.com
+              {email}
             </a>
           </div>
 
@@ -78,7 +108,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-white/10">
           <p className="text-white/30 text-[12px]">
-            © {new Date().getFullYear()} Creative Marketing Agency. All rights reserved.
+            {copyright}
           </p>
         </div>
       </div>

@@ -1,8 +1,7 @@
-"use client";
-
 import Image from "next/image";
+import { getPayloadClient } from "@/lib/payload";
 
-const testimonials = [
+const defaultTestimonials = [
   {
     name: "John Doe",
     role: "CEO, GLOBAL RETAIL",
@@ -26,26 +25,54 @@ const testimonials = [
   },
 ];
 
-export default function Testimonials() {
+export default async function Testimonials() {
+  // Fetch the "Testimonials" global directly from Payload
+  const data = await getPayloadClient()
+    .then((payload) => payload.findGlobal({ slug: "testimonials" }))
+    .catch((err) => {
+      console.error("Failed to load 'testimonials' global from Payload:", err);
+      return null;
+    });
+
+  const eyebrow = data?.eyebrow || "TESTIMONIALS";
+  const heading = data?.heading || "What our clients say.";
+
+  const items =
+    data?.items && data.items.length > 0
+      ? data.items.map((t, index) => {
+          let avatarUrl = "";
+          if (typeof t.avatar === "object" && t.avatar && "url" in t.avatar && typeof t.avatar.url === "string") {
+            avatarUrl = t.avatar.url;
+          }
+          const defaultItem = defaultTestimonials[index % defaultTestimonials.length];
+          return {
+            name: t.name || defaultItem.name,
+            role: t.role || defaultItem.role,
+            quote: t.quote || defaultItem.quote,
+            avatar: avatarUrl || defaultItem.avatar,
+          };
+        })
+      : defaultTestimonials;
+
   return (
     <section className="bg-black py-24 md:py-32">
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Header */}
         <div className="mb-16">
-          <p className="section-label text-white/40 mb-4">TESTIMONIALS</p>
+          <p className="section-label text-white/40 mb-4">{eyebrow}</p>
           <h2
-            className="text-white font-medium"
+            className="text-white font-medium whitespace-pre-line"
             style={{ fontSize: "clamp(36px, 5vw, 64px)", lineHeight: 1.05 }}
           >
-            What our clients say.
+            {heading}
           </h2>
         </div>
 
         {/* Testimonial cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {testimonials.map((t) => (
+          {items.map((t, index) => (
             <div
-              key={t.name}
+              key={`${t.name}-${index}`}
               className="rounded-2xl p-7 flex flex-col gap-6"
               style={{
                 background: "#0a0a0a",
@@ -61,9 +88,6 @@ export default function Testimonials() {
                     width={48}
                     height={48}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
                   />
                 </div>
                 <div>

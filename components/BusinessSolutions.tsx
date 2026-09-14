@@ -1,8 +1,7 @@
-"use client";
-
 import Image from "next/image";
+import { getPayloadClient } from "@/lib/payload";
 
-const solutions = [
+const defaultSolutions = [
   {
     title: "AI-Driven Ad Campaigns",
     description: "We craft compelling brand identities that resonate. From defining your voice and values to designing memorable logos and brand systems.",
@@ -25,7 +24,37 @@ const solutions = [
   },
 ];
 
-export default function BusinessSolutions() {
+export default async function BusinessSolutions() {
+  // Fetch the "BusinessSolutions" global directly from Payload
+  const data = await getPayloadClient()
+    .then((payload) => payload.findGlobal({ slug: "business-solutions" }))
+    .catch((err) => {
+      console.error("Failed to load 'business-solutions' global from Payload:", err);
+      return null;
+    });
+
+  const eyebrow = data?.eyebrow || "SOLUTIONS";
+  const heading = data?.heading || "Tailored for all\nbusiness sizes.";
+  const description =
+    data?.description ||
+    "Discover how our AI-powered solutions can specifically benefit your marketing challenges and goals.";
+
+  const items =
+    data?.items && data.items.length > 0
+      ? data.items.map((sol, i) => {
+          let imageUrl = "";
+          if (typeof sol.image === "object" && sol.image && "url" in sol.image && typeof sol.image.url === "string") {
+            imageUrl = sol.image.url;
+          }
+          const defaultItem = defaultSolutions[i % defaultSolutions.length];
+          return {
+            title: sol.title || defaultItem.title,
+            description: sol.description || defaultItem.description,
+            image: imageUrl || defaultItem.image,
+          };
+        })
+      : defaultSolutions;
+
   return (
     <section className="relative overflow-hidden py-20 md:py-32">
       {/* Warm orange gradient */}
@@ -51,23 +80,23 @@ export default function BusinessSolutions() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-start">
           {/* Left sticky text */}
           <div className="lg:sticky lg:top-28">
-            <p className="section-label text-white/60 mb-4">SOLUTIONS</p>
+            <p className="section-label text-white/60 mb-4">{eyebrow}</p>
             <h2
-              className="text-white font-medium mb-5"
+              className="text-white font-medium mb-5 whitespace-pre-line"
               style={{ fontSize: "clamp(36px, 4.5vw, 56px)", lineHeight: 1.05 }}
             >
-              Tailored for all<br />business sizes.
+              {heading}
             </h2>
             <p className="text-white/65 text-[15px] leading-relaxed max-w-[340px]">
-              Discover how our AI-powered solutions can specifically benefit your marketing challenges and goals.
+              {description}
             </p>
           </div>
 
           {/* Right scrolling cards */}
           <div className="flex flex-col gap-4">
-            {solutions.map((sol, i) => (
+            {items.map((sol, i) => (
               <div
-                key={i}
+                key={`${sol.title}-${i}`}
                 className="rounded-2xl p-6 md:p-8"
                 style={{
                   background: "rgba(60, 18, 2, 0.65)",
@@ -88,7 +117,6 @@ export default function BusinessSolutions() {
                     width={600}
                     height={340}
                     className="w-full h-full object-cover opacity-80"
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                   />
                 </div>
               </div>

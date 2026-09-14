@@ -1,8 +1,7 @@
-"use client";
-
 import Image from "next/image";
+import { getPayloadClient } from "@/lib/payload";
 
-const features = [
+const defaultFeatures = [
   {
     title: "AI Campaigns",
     description: "Deploy intelligent, targeted marketing campaigns.",
@@ -20,29 +19,59 @@ const features = [
   },
 ];
 
-export default function Features() {
+export default async function Features() {
+  // Fetch the "Features" global directly from Payload
+  const data = await getPayloadClient()
+    .then((payload) => payload.findGlobal({ slug: "features", depth: 2 }))
+    .catch((err) => {
+      console.error("Failed to load 'features' global from Payload:", err);
+      return null;
+    });
+
+  const eyebrow = data?.eyebrow || "FEATURES";
+  const heading = data?.heading || "The future of marketing is here.";
+  const description =
+    data?.description ||
+    "Explore the core benefits that make our AI platform essential for modern marketing success.";
+
+  const items =
+    data?.items && data.items.length > 0
+      ? data.items
+        .map((item, index) => {
+          let imageUrl = "";
+          if (typeof item.image === "object" && item.image && "url" in item.image && typeof item.image.url === "string") {
+            imageUrl = item.image.url;
+          }
+          return {
+            title: item.title || `Feature ${index + 1}`,
+            description: item.description || "",
+            image: imageUrl || defaultFeatures[index % defaultFeatures.length].image,
+          };
+        })
+      : defaultFeatures;
+
   return (
     <section id="features" className="bg-black py-24 md:py-32">
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Section header */}
         <div className="mb-16">
-          <p className="section-label text-white/50 mb-4">FEATURES</p>
+          <p className="section-label text-white/50 mb-4">{eyebrow}</p>
           <h2
-            className="text-white font-medium mb-6"
+            className="text-white font-medium mb-6 whitespace-pre-line"
             style={{ fontSize: "clamp(36px, 5vw, 64px)", lineHeight: 1.05 }}
           >
-            The future of marketing is here.
+            {heading}
           </h2>
           <p className="text-white/60 text-[15px] max-w-[520px] leading-relaxed">
-            Explore the core benefits that make our AI platform essential for modern marketing success.
+            {description}
           </p>
         </div>
 
         {/* Feature cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {features.map((feature) => (
+          {items.map((feature, index) => (
             <div
-              key={feature.title}
+              key={`${feature.title}-${index}`}
               className="group rounded-2xl overflow-hidden relative"
               style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.06)" }}
             >

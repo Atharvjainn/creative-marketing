@@ -1,22 +1,58 @@
-"use client";
-
 import Image from "next/image";
+import { getPayloadClient } from "@/lib/payload";
 
-const avatars = [
+const defaultAvatars = [
   "https://files.peachworlds.com/website/ffb41913-0004-4a71-b48c-757fe7c42dfb/4.png",
   "https://files.peachworlds.com/website/19adf321-fa4e-4000-adb7-40e6caa44c8f/1.png",
   "https://files.peachworlds.com/website/3f7de391-28d0-48c8-b3da-e17e8c1eb83b/3.png",
   "https://files.peachworlds.com/website/88da0e8e-95c6-450d-9654-ce846fe84905/2.png",
 ];
 
-export default function Hero() {
+export default async function Hero() {
+  // Fetch the "Hero" global directly from Payload
+  const data = await getPayloadClient()
+    .then((payload) => payload.findGlobal({ slug: "hero" }))
+    .catch((err) => {
+      console.error("Failed to load 'hero' global from Payload:", err);
+      return null;
+    });
+
+  const heading = data?.heading || "Elevate your\nmarketing with\nAI Solutions.";
+  const trustText = data?.trustText || "Trusted by 10k+ businesses";
+  const description =
+    data?.description ||
+    "Discover how our AI-driven strategies transform your marketing, delivering unparalleled results and efficiency.";
+
+  const primaryButton = data?.primaryButton || {
+    label: "Get Started",
+    url: "#",
+  };
+
+  const secondaryButton = data?.secondaryButton || {
+    label: "Discover More",
+    url: "#solutions",
+  };
+
+  const avatars: string[] =
+    data?.avatars && data.avatars.length > 0
+      ? data.avatars
+          .map((a) => {
+            if (typeof a.image === "object" && a.image && "url" in a.image && typeof a.image.url === "string") {
+              return a.image.url;
+            }
+            return "";
+          })
+          .filter(Boolean)
+      : defaultAvatars;
+
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden">
       {/* Warm orange gradient background — matches original */}
       <div
         className="absolute inset-0"
         style={{
-          background: "radial-gradient(ellipse at 62% 0%, #C84510 0%, #9B2E06 28%, #4A1000 58%, #0E0200 85%)",
+          background:
+            "radial-gradient(ellipse at 62% 0%, #C84510 0%, #9B2E06 28%, #4A1000 58%, #0E0200 85%)",
         }}
       />
 
@@ -24,7 +60,8 @@ export default function Hero() {
       <div
         className="absolute inset-0"
         style={{
-          background: "linear-gradient(160deg, transparent 30%, rgba(10,2,0,0.7) 100%)",
+          background:
+            "linear-gradient(160deg, transparent 30%, rgba(10,2,0,0.7) 100%)",
         }}
       />
 
@@ -43,7 +80,8 @@ export default function Hero() {
       <div
         className="absolute inset-0"
         style={{
-          background: "linear-gradient(to right, rgba(12,2,0,0.78) 0%, rgba(12,2,0,0.35) 42%, transparent 65%)",
+          background:
+            "linear-gradient(to right, rgba(12,2,0,0.78) 0%, rgba(12,2,0,0.35) 42%, transparent 65%)",
         }}
       />
 
@@ -51,31 +89,50 @@ export default function Hero() {
       <div
         className="absolute inset-0"
         style={{
-          background: "linear-gradient(to top, rgba(8,1,0,0.65) 0%, transparent 40%)",
+          background:
+            "linear-gradient(to top, rgba(8,1,0,0.65) 0%, transparent 40%)",
         }}
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col justify-end min-h-screen max-w-[1400px] w-full" style={{ marginLeft: "auto", marginRight: "auto", paddingLeft: "24px", paddingRight: "24px", paddingBottom: "96px" }}>
+      <div
+        className="relative z-10 flex flex-col justify-end min-h-screen max-w-[1400px] w-full"
+        style={{
+          marginLeft: "auto",
+          marginRight: "auto",
+          paddingLeft: "24px",
+          paddingRight: "24px",
+          paddingBottom: "96px",
+        }}
+      >
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
           {/* Left: headline */}
           <div className="max-w-[620px]">
             <h1
-              className="text-white font-medium leading-none"
+              className="text-white font-medium leading-none whitespace-pre-line"
               style={{ fontSize: "clamp(48px, 5vw, 76px)", lineHeight: 1 }}
             >
-              Elevate your<br />marketing with<br />AI Solutions.
+              {heading}
             </h1>
             <div className="mt-5">
-              <p className="text-white/80 text-[14px] mb-3">Trusted by 10k+ businesses</p>
+              <p className="text-white/80 text-[14px] mb-3">{trustText}</p>
               <div className="flex items-center">
                 {avatars.map((src, i) => (
                   <div
                     key={i}
                     className="w-9 h-9 rounded-full overflow-hidden border-2 border-white/20 bg-neutral-700 shrink-0"
-                    style={{ marginLeft: i > 0 ? "-10px" : 0, zIndex: avatars.length - i }}
+                    style={{
+                      marginLeft: i > 0 ? "-10px" : 0,
+                      zIndex: avatars.length - i,
+                    }}
                   >
-                    <Image src={src} alt={`user ${i + 1}`} width={36} height={36} className="w-full h-full object-cover" />
+                    <Image
+                      src={src}
+                      alt={`user ${i + 1}`}
+                      width={36}
+                      height={36}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 ))}
               </div>
@@ -85,21 +142,23 @@ export default function Hero() {
           {/* Right: description + CTA */}
           <div className="max-w-[400px]">
             <p className="text-white/80 text-[15px] mb-6 leading-relaxed">
-              Discover how our AI-driven strategies transform your marketing, delivering unparalleled results and efficiency.
+              {description}
             </p>
             <div className="flex items-center gap-3">
               <a
-                href="#"
+                href={primaryButton.url}
                 className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-full text-[14px] font-medium hover:bg-neutral-100 transition-colors"
               >
-                Get Started
-                <span className="w-5 h-5 rounded-full bg-black flex items-center justify-center text-white text-xs">›</span>
+                {primaryButton.label}
+                <span className="w-5 h-5 rounded-full bg-black flex items-center justify-center text-white text-xs">
+                  ›
+                </span>
               </a>
               <a
-                href="#solutions"
+                href={secondaryButton.url}
                 className="flex items-center gap-2 bg-white/15 text-white px-6 py-3 rounded-full text-[14px] font-medium hover:bg-white/25 transition-colors backdrop-blur-sm"
               >
-                Discover More
+                {secondaryButton.label}
               </a>
             </div>
           </div>
