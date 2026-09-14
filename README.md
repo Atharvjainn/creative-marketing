@@ -114,5 +114,5 @@ npm run generate:importmap
 ## Deployment Notes
 
 - Set `DATABASE_URI` and `PAYLOAD_SECRET` as environment variables on your hosting provider (Vercel, etc.) — do not commit `.env` files, and replace the hardcoded fallback secret in `payload.config.ts` before going live.
-- Uploaded media is currently stored locally (`staticDir: "media"`), which won't persist on platforms with an ephemeral filesystem (like Vercel) — switch to a cloud storage adapter (e.g. S3) before deploying.
+- Uploaded media is currently stored locally (`staticDir: "media"`) — fine for local testing, but this won't persist on platforms with an ephemeral filesystem (like Vercel). Before deploying, switch to a cloud storage adapter such as **Cloudinary** (`@payloadcms/storage-cloudinary`) or **S3** (`@payloadcms/storage-s3`) so uploads survive redeploys.
 - If you add new image domains for remote images, update `remotePatterns` in `next.config.ts`.
