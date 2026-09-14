@@ -43,7 +43,7 @@ export default async function Benefits() {
       : "https://files.peachworlds.com/website/969dfc0e-13eb-475b-8459-6d8e44a15e0a/chatgpt-image-jun-15-2026-09-05-41-pm.webp";
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-28">
+    <section id="benefits" className="relative overflow-hidden py-20 md:py-28">
       {/* Warm orange gradient background */}
       <div
         className="absolute inset-0"

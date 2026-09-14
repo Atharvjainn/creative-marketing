@@ -69,7 +69,7 @@ export default async function Hero() {
     "https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp";
 
   return (
-    <section className="relative min-h-screen flex flex-col overflow-hidden justify-end">
+    <section id="hero" className="relative min-h-screen flex flex-col overflow-hidden justify-end">
       {customBgUrl ? (
         <>
           {/* Custom background image uploaded via CMS */}

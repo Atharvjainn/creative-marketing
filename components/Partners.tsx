@@ -55,7 +55,7 @@ export default async function Partners() {
       : "https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp";
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-28">
+    <section id="partners" className="relative overflow-hidden py-20 md:py-28">
       {/* Uniform light peach base */}
       <div
         className="absolute inset-0"

@@ -84,7 +84,7 @@ export default async function CTA() {
       : defaultSocialLinks;
 
   return (
-    <section className="relative overflow-hidden" style={{ minHeight: "90vh" }}>
+    <section id="cta" className="relative overflow-hidden" style={{ minHeight: "90vh" }}>
       {/* Full background: disc/petri dish image — warm peach/cream tones match original CTA */}
       <div
         className="absolute inset-0"

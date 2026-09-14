@@ -47,24 +47,24 @@ export default async function BusinessSolutions() {
   const items =
     data?.items && data.items.length > 0
       ? data.items.map((sol, i) => {
-          let imageUrl = "";
-          if (typeof sol.image === "object" && sol.image && "url" in sol.image && typeof sol.image.url === "string") {
-            imageUrl = sol.image.url;
-          }
-          const defaultItem = defaultSolutions[i % defaultSolutions.length];
-          return {
-            title: sol.title || defaultItem.title,
-            description: sol.description || defaultItem.description,
-            image: imageUrl || defaultItem.image,
-          };
-        })
+        let imageUrl = "";
+        if (typeof sol.image === "object" && sol.image && "url" in sol.image && typeof sol.image.url === "string") {
+          imageUrl = sol.image.url;
+        }
+        const defaultItem = defaultSolutions[i % defaultSolutions.length];
+        return {
+          title: sol.title || defaultItem.title,
+          description: sol.description || defaultItem.description,
+          image: imageUrl || defaultItem.image,
+        };
+      })
       : defaultSolutions;
 
   const bgImage =
     typeof data?.backgroundImage === "object" &&
-    data.backgroundImage &&
-    "url" in data.backgroundImage &&
-    typeof data.backgroundImage.url === "string"
+      data.backgroundImage &&
+      "url" in data.backgroundImage &&
+      typeof data.backgroundImage.url === "string"
       ? data.backgroundImage.url
       : "https://files.peachworlds.com/website/351c33a9-2727-4ead-96ba-0e84a1dfccfd/chatgpt-image-jun-15-2026-09-04-22-pm.webp";
 
