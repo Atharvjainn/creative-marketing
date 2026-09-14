@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { getPayloadClient } from "@/lib/payload";
+import SmoothScroll from "@/components/animations/SmoothScroll";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -51,7 +52,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={dmSans.variable}>
-      <body className={dmSans.className}>{children}</body>
+      <body className={dmSans.className}>
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }
