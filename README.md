@@ -34,6 +34,8 @@ payload-types.ts      → auto-generated types (do not edit by hand)
 **Globals** (one editable "page section" each, no separate entries/list — just one record per section)
 Header, Hero, Solutions, Partners, Features, Key Features, Business Solutions, Benefits, Testimonials, Pricing, CTA, Footer
 
+> **Note:** The `categories` and `projects` collections were removed from `payload.config.ts` since they're not currently used by the site. If you're migrating to a fresh database, make sure you're running migrations against the current schema (without these two tables) rather than an older one that still includes them.
+
 ---
 
 ## Getting Started
