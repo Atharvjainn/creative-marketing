@@ -4,11 +4,24 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { Solutions } from './globals/Solutions'
+import { Hero } from './globals/Hero'
+import { Partners } from './globals/Partners'
+import { Features } from './globals/Features'
+import { KeyFeatures } from './globals/KeyFeatures'
+import { BusinessSolutions } from './globals/BusinessSolutions'
+import { Benefits } from './globals/Benefits'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Categories } from './collections/Categories'
 import { Projects } from './collections/Projects'
+import { Testimonials } from './globals/Testimonials'
+import { Pricing } from './globals/Pricing'
+import { CTA } from './globals/CTA'
+import { Footer } from './globals/Footer'
+import { Header } from './globals/Header'
+// import Benefits from './components/Benefits'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -21,6 +34,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Categories, Projects],
+  globals: [Solutions, Hero, Partners, Features, KeyFeatures, BusinessSolutions, Benefits, Testimonials, Pricing, CTA, Footer, Header],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'creativemarketing_payload_secret_key_2026_secure',
   typescript: {
