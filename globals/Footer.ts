@@ -15,6 +15,12 @@ export const Footer: GlobalConfig = {
             required: true,
         },
         {
+            name: "backgroundImage",
+            type: "upload",
+            relationTo: "media",
+            required: false,
+        },
+        {
             name: 'menuLinks',
             type: 'array',
             fields: [

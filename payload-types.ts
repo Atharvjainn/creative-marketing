@@ -727,6 +727,7 @@ export interface Footer {
   id: number;
   brandName: string;
   email: string;
+  backgroundImage?: (number | null) | Media;
   menuLinks?:
     | {
         label: string;
@@ -1008,6 +1009,7 @@ export interface CtaSelect<T extends boolean = true> {
 export interface FooterSelect<T extends boolean = true> {
   brandName?: T;
   email?: T;
+  backgroundImage?: T;
   menuLinks?:
     | T
     | {

@@ -10,6 +10,8 @@ import Testimonials from "@/components/Testimonials";
 import Pricing from "@/components/Pricing";
 import CTA from "@/components/CTA";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <main>

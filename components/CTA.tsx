@@ -1,28 +1,76 @@
 import { getPayloadClient } from "@/lib/payload";
 
+const defaultMenuLinks = [
+  { label: "Solutions", url: "#solutions" },
+  { label: "Features", url: "#features" },
+  { label: "AI Power", url: "#ai-power" },
+  { label: "Pricing", url: "#pricing" },
+];
+
+const defaultSocialLinks = [
+  { label: "Instagram", url: "#" },
+  { label: "Linkedin", url: "#" },
+  { label: "X", url: "#" },
+];
+
 export default async function CTA() {
-  // Fetch the "CTA" global directly from Payload
-  const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "cta" }))
-    .catch((err) => {
-      console.error("Failed to load 'cta' global from Payload:", err);
-      return null;
-    });
+  const payload = await getPayloadClient().catch((err) => {
+    console.error("Failed to initialize Payload client:", err);
+    return null;
+  });
+
+  // Fetch both CTA and Footer globals concurrently from Payload
+  const [ctaData, footerData] = await Promise.all([
+    payload
+      ? payload.findGlobal({ slug: "cta" }).catch((err) => {
+          console.error("Failed to load 'cta' global from Payload:", err);
+          return null;
+        })
+      : null,
+    payload
+      ? payload.findGlobal({ slug: "footer" }).catch((err) => {
+          console.error("Failed to load 'footer' global from Payload:", err);
+          return null;
+        })
+      : null,
+  ]);
 
   const heading =
-    data?.heading || "Grow with us.\nStart your journey today.";
+    ctaData?.heading || "Grow with us.\nStart your journey today.";
 
-  const primaryButton = data?.primaryButton || {
+  const primaryButton = ctaData?.primaryButton || {
     label: "Get Started",
     url: "#",
   };
 
-  const secondaryButton = data?.secondaryButton || {
+  const secondaryButton = ctaData?.secondaryButton || {
     label: "Learn More",
     url: "#",
   };
 
-  const email = data?.email || "contact@creativemarketing.com";
+  // Dynamic Footer Data from 'footer' CMS Global
+  const brandName = footerData?.brandName || "Creative Marketing Agency";
+  const email =
+    footerData?.email || ctaData?.email || "contact@creativemarketing.com";
+  const copyright =
+    footerData?.copyright ||
+    `© ${new Date().getFullYear()} Creative Marketing Agency. All rights reserved.`;
+
+  const menuLinks =
+    footerData?.menuLinks && footerData.menuLinks.length > 0
+      ? footerData.menuLinks.map((item) => ({
+          label: item.label,
+          url: item.url || "#",
+        }))
+      : defaultMenuLinks;
+
+  const socialLinks =
+    footerData?.socialLinks && footerData.socialLinks.length > 0
+      ? footerData.socialLinks.map((item) => ({
+          label: item.label,
+          url: item.url || "#",
+        }))
+      : defaultSocialLinks;
 
   return (
     <section className="relative overflow-hidden" style={{ minHeight: "90vh" }}>
@@ -80,8 +128,13 @@ export default async function CTA() {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
             {/* Brand */}
             <div>
-              <p className="text-white font-semibold text-[18px] mb-1">Creative Marketing Agency</p>
-              <p className="text-white/55 text-[14px]">{email}</p>
+              <p className="text-white font-semibold text-[18px] mb-1">{brandName}</p>
+              <a
+                href={`mailto:${email}`}
+                className="text-white/55 text-[14px] hover:text-white/80 transition-colors"
+              >
+                {email}
+              </a>
             </div>
 
             {/* Menu + Socials */}
@@ -89,9 +142,11 @@ export default async function CTA() {
               <div>
                 <p className="text-white/40 text-[11px] font-medium tracking-widest uppercase mb-3">Menu</p>
                 <ul className="flex flex-col gap-2">
-                  {["Solutions", "Features", "AI Power", "Pricing"].map((item) => (
-                    <li key={item}>
-                      <a href="#" className="text-white/75 text-[14px] hover:text-white transition-colors">{item}</a>
+                  {menuLinks.map((item) => (
+                    <li key={item.label}>
+                      <a href={item.url} className="text-white/75 text-[14px] hover:text-white transition-colors">
+                        {item.label}
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -99,9 +154,16 @@ export default async function CTA() {
               <div>
                 <p className="text-white/40 text-[11px] font-medium tracking-widest uppercase mb-3">Socials</p>
                 <ul className="flex flex-col gap-2">
-                  {["Instagram", "Linkedin", "X"].map((item) => (
-                    <li key={item}>
-                      <a href="#" className="text-white/75 text-[14px] hover:text-white transition-colors">{item}</a>
+                  {socialLinks.map((item) => (
+                    <li key={item.label}>
+                      <a
+                        href={item.url}
+                        className="text-white/75 text-[14px] hover:text-white transition-colors"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.label}
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -110,7 +172,7 @@ export default async function CTA() {
           </div>
 
           <div className="border-t border-white/10 mt-8 pt-6">
-            <p className="text-white/35 text-[12px]">© 2024 Creative Marketing Agency. All rights reserved.</p>
+            <p className="text-white/35 text-[12px]">{copyright}</p>
           </div>
         </div>
       </div>
