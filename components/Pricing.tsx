@@ -48,9 +48,9 @@ const defaultPlans = [
 ];
 
 export default async function Pricing() {
-  // Fetch the "Pricing" global directly from Payload
+  // Fetch the "Pricing" global directly from Payload with depth 2
   const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "pricing" }))
+    .then((payload) => payload.findGlobal({ slug: "pricing", depth: 2 }))
     .catch((err) => {
       console.error("Failed to load 'pricing' global from Payload:", err);
       return null;

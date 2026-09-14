@@ -27,9 +27,9 @@ const defaultSolutions = [
 ];
 
 export default async function BusinessSolutions() {
-  // Fetch the "BusinessSolutions" global directly from Payload
+  // Fetch the "BusinessSolutions" global directly from Payload with depth 2
   const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "business-solutions" }))
+    .then((payload) => payload.findGlobal({ slug: "business-solutions", depth: 2 }))
     .catch((err) => {
       console.error("Failed to load 'business-solutions' global from Payload:", err);
       return null;

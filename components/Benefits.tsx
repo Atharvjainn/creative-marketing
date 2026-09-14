@@ -10,9 +10,9 @@ const defaultStats = [
 ];
 
 export default async function Benefits() {
-  // Fetch the "Benefits" global directly from Payload
+  // Fetch the "Benefits" global directly from Payload with depth 2
   const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "benefits" }))
+    .then((payload) => payload.findGlobal({ slug: "benefits", depth: 2 }))
     .catch((err) => {
       console.error("Failed to load 'benefits' global from Payload:", err);
       return null;

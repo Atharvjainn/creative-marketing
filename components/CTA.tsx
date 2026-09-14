@@ -23,13 +23,13 @@ export default async function CTA() {
   // Fetch both CTA and Footer globals concurrently from Payload
   const [ctaData, footerData] = await Promise.all([
     payload
-      ? payload.findGlobal({ slug: "cta" }).catch((err) => {
+      ? payload.findGlobal({ slug: "cta", depth: 2 }).catch((err) => {
         console.error("Failed to load 'cta' global from Payload:", err);
         return null;
       })
       : null,
     payload
-      ? payload.findGlobal({ slug: "footer" }).catch((err) => {
+      ? payload.findGlobal({ slug: "footer", depth: 2 }).catch((err) => {
         console.error("Failed to load 'footer' global from Payload:", err);
         return null;
       })

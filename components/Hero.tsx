@@ -10,9 +10,9 @@ const defaultAvatars = [
 ];
 
 export default async function Hero() {
-  // Fetch the "Hero" global directly from Payload
+  // Fetch the "Hero" global directly from Payload with depth 2 for populated media
   const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "hero" }))
+    .then((payload) => payload.findGlobal({ slug: "hero", depth: 2 }))
     .catch((err) => {
       console.error("Failed to load 'hero' global from Payload:", err);
       return null;
@@ -52,67 +52,107 @@ export default async function Hero() {
   const displayAvatars = rawAvatars.slice(0, 5);
   const extraCount = rawAvatars.length > 5 ? rawAvatars.length - 5 : 0;
 
-  const bgImage =
-    typeof data?.backgroundImage === "object" &&
-    data.backgroundImage &&
-    "url" in data.backgroundImage &&
-    typeof data.backgroundImage.url === "string"
-      ? data.backgroundImage.url
-      : "https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp";
+  let customBgUrl: string | null = null;
+  const rawBg = data?.backgroundImage as unknown;
+  if (
+    typeof rawBg === "object" &&
+    rawBg !== null &&
+    "url" in rawBg &&
+    typeof (rawBg as { url: unknown }).url === "string"
+  ) {
+    customBgUrl = (rawBg as { url: string }).url;
+  } else if (typeof rawBg === "string" && rawBg.trim().length > 0) {
+    customBgUrl = rawBg.trim();
+  }
+
+  const defaultDiscImage =
+    "https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp";
 
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden justify-end">
-      {/* Warm orange gradient background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 62% 0%, #C84510 0%, #9B2E06 28%, #4A1000 58%, #0E0200 85%)",
-        }}
-      />
+      {customBgUrl ? (
+        <>
+          {/* Custom background image uploaded via CMS */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${customBgUrl})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
 
-      {/* Ambient floating aurora lights */}
-      <div
-        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-orange-600/20 blur-3xl pointer-events-none animate-auroraFlow"
-      />
+          {/* Dark overlay scrim for high text contrast */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(10,2,0,0.92) 0%, rgba(10,2,0,0.55) 45%, rgba(10,2,0,0.7) 100%)",
+            }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(10,2,0,0.85) 0%, rgba(10,2,0,0.4) 55%, transparent 100%)",
+            }}
+          />
+        </>
+      ) : (
+        <>
+          {/* Warm orange gradient background */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse at 62% 0%, #C84510 0%, #9B2E06 28%, #4A1000 58%, #0E0200 85%)",
+            }}
+          />
 
-      {/* Additional warmth layer */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(160deg, transparent 30%, rgba(10,2,0,0.7) 100%)",
-        }}
-      />
+          {/* Ambient floating aurora lights */}
+          <div
+            className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-orange-600/20 blur-3xl pointer-events-none animate-auroraFlow"
+          />
 
-      {/* Disc image — right side with subtle hover enlarge only */}
-      <div
-        className="absolute inset-y-0 right-[-5%] w-[70%] md:w-[65%] transition-transform duration-700 ease-out hover:scale-[1.03]"
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center left",
-          opacity: 0.95,
-        }}
-      />
+          {/* Additional warmth layer */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(160deg, transparent 30%, rgba(10,2,0,0.7) 100%)",
+            }}
+          />
 
-      {/* Fade edge — left side for text readability */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to right, rgba(12,2,0,0.85) 0%, rgba(12,2,0,0.45) 45%, transparent 70%)",
-        }}
-      />
+          {/* Disc image — right side with subtle hover enlarge only */}
+          <div
+            className="absolute inset-y-0 right-[-5%] w-[70%] md:w-[65%] transition-transform duration-700 ease-out hover:scale-[1.03]"
+            style={{
+              backgroundImage: `url(${defaultDiscImage})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center left",
+              opacity: 0.95,
+            }}
+          />
 
-      {/* Fade edge — bottom */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(8,1,0,0.75) 0%, transparent 40%)",
-        }}
-      />
+          {/* Fade edge — left side for text readability */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(12,2,0,0.85) 0%, rgba(12,2,0,0.45) 45%, transparent 70%)",
+            }}
+          />
+
+          {/* Fade edge — bottom */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(8,1,0,0.75) 0%, transparent 40%)",
+            }}
+          />
+        </>
+      )}
 
       {/* Content */}
       <div

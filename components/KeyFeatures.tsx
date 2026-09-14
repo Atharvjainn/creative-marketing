@@ -36,9 +36,9 @@ const defaultKeyFeatures = [
 ];
 
 export default async function KeyFeatures() {
-  // Fetch the "KeyFeatures" global directly from Payload
+  // Fetch the "KeyFeatures" global directly from Payload with depth 2
   const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "key-features" }))
+    .then((payload) => payload.findGlobal({ slug: "key-features", depth: 2 }))
     .catch((err) => {
       console.error("Failed to load 'key-features' global from Payload:", err);
       return null;

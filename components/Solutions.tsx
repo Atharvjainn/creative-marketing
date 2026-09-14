@@ -3,9 +3,9 @@ import { getPayloadClient } from "@/lib/payload";
 import Reveal from "./animations/Reveal";
 
 export default async function Solutions() {
-  // Fetch the "Solutions" global directly from Payload
+  // Fetch the "Solutions" global directly from Payload with depth 2
   const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "solutions" }))
+    .then((payload) => payload.findGlobal({ slug: "solutions", depth: 2 }))
     .catch((err) => {
       console.error("Failed to load 'solutions' global from Payload:", err);
       return null;

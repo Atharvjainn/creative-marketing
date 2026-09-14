@@ -28,9 +28,9 @@ const defaultTestimonials = [
 ];
 
 export default async function Testimonials() {
-  // Fetch the "Testimonials" global directly from Payload
+  // Fetch the "Testimonials" global directly from Payload with depth 2
   const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "testimonials" }))
+    .then((payload) => payload.findGlobal({ slug: "testimonials", depth: 2 }))
     .catch((err) => {
       console.error("Failed to load 'testimonials' global from Payload:", err);
       return null;

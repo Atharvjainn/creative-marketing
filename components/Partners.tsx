@@ -14,9 +14,9 @@ const defaultPartners = [
 ];
 
 export default async function Partners() {
-  // Fetch the "Partners" global directly from Payload
+  // Fetch the "Partners" global directly from Payload with depth 2
   const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "partners" }))
+    .then((payload) => payload.findGlobal({ slug: "partners", depth: 2 }))
     .catch((err) => {
       console.error("Failed to load 'partners' global from Payload:", err);
       return null;

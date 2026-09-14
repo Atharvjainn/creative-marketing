@@ -9,9 +9,9 @@ const defaultNav = [
 ];
 
 export default async function Header() {
-  // Fetch the "Header" global directly from Payload
+  // Fetch the "Header" global directly from Payload with depth 2
   const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "header" }))
+    .then((payload) => payload.findGlobal({ slug: "header", depth: 2 }))
     .catch((err) => {
       console.error("Failed to load 'header' global from Payload:", err);
       return null;
