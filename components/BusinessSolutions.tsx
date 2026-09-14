@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { getPayloadClient } from "@/lib/payload";
+import Reveal from "./animations/Reveal";
+import SpotlightCard from "./animations/SpotlightCard";
 
 const defaultSolutions = [
   {
@@ -33,6 +35,9 @@ export default async function BusinessSolutions() {
       return null;
     });
 
+  if (data?.enabled === false) return null;
+  const animDir = (data?.animationDirection as "up" | "down" | "left" | "right" | "zoom" | "none") || "up";
+
   const eyebrow = data?.eyebrow || "SOLUTIONS";
   const heading = data?.heading || "Tailored for all\nbusiness sizes.";
   const description =
@@ -56,8 +61,8 @@ export default async function BusinessSolutions() {
       : defaultSolutions;
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-32">
-      {/* Warm orange gradient */}
+    <section className="relative overflow-hidden py-24 md:py-36">
+      {/* Warm orange gradient background */}
       <div
         className="absolute inset-0"
         style={{
@@ -76,50 +81,69 @@ export default async function BusinessSolutions() {
         }}
       />
 
-      <div className="relative z-10 max-w-[1320px] mx-auto px-8 md:px-12">
+      <div className="relative z-10 max-w-[1320px] mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-start">
           {/* Left sticky text */}
-          <div className="lg:sticky lg:top-28">
-            <p className="section-label text-white/60 mb-4">{eyebrow}</p>
-            <h2
-              className="text-white font-medium mb-5 whitespace-pre-line"
-              style={{ fontSize: "clamp(36px, 4.5vw, 56px)", lineHeight: 1.05 }}
-            >
-              {heading}
-            </h2>
-            <p className="text-white/65 text-[15px] leading-relaxed max-w-[340px]">
-              {description}
-            </p>
+          <div className="lg:sticky lg:top-32">
+            <Reveal direction="up" delay={50}>
+              <p className="section-label text-orange-400 mb-4">{eyebrow}</p>
+            </Reveal>
+            <Reveal direction="up" delay={150}>
+              <h2
+                className="text-white font-medium mb-6 whitespace-pre-line tracking-tight leading-[1.05]"
+                style={{ fontSize: "clamp(36px, 4.5vw, 56px)" }}
+              >
+                {heading}
+              </h2>
+            </Reveal>
+            <Reveal direction="up" delay={250}>
+              <p className="text-white/70 text-[16px] leading-relaxed max-w-[380px]">
+                {description}
+              </p>
+            </Reveal>
           </div>
 
-          {/* Right scrolling cards */}
-          <div className="flex flex-col gap-4">
+          {/* Right scrolling adaptive cards */}
+          <div className="flex flex-col gap-6">
             {items.map((sol, i) => (
-              <div
+              <Reveal
                 key={`${sol.title}-${i}`}
-                className="rounded-2xl p-6 md:p-8"
-                style={{
-                  background: "rgba(60, 18, 2, 0.65)",
-                  backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                }}
+                direction="up"
+                delay={100 + i * 80}
+                duration={700}
               >
-                <h3 className="text-white text-[20px] md:text-[24px] font-medium mb-3 whitespace-pre-line">
-                  {sol.title}
-                </h3>
-                <p className="text-white/60 text-[14px] leading-relaxed mb-5">
-                  {sol.description}
-                </p>
-                <div className="rounded-xl overflow-hidden bg-black/30 aspect-video">
-                  <Image
-                    src={sol.image}
-                    alt={sol.title.replace('\n', ' ')}
-                    width={600}
-                    height={340}
-                    className="w-full h-full object-cover opacity-80"
-                  />
-                </div>
-              </div>
+                <SpotlightCard
+                  className="group rounded-3xl p-7 md:p-9 transition-all duration-300 hover:border-orange-500/40 hover:shadow-2xl hover:shadow-orange-950/40"
+                  style={{
+                    background: "rgba(35, 10, 2, 0.70)",
+                    backdropFilter: "blur(20px)",
+                    WebkitBackdropFilter: "blur(20px)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-mono text-orange-400 bg-orange-950/70 border border-orange-800/40 px-3 py-1 rounded-full">
+                      0{i + 1}
+                    </span>
+                  </div>
+
+                  <h3 className="text-white text-[22px] md:text-[26px] font-semibold mb-3 whitespace-pre-line tracking-tight group-hover:text-orange-300 transition-colors">
+                    {sol.title}
+                  </h3>
+                  <p className="text-white/65 text-[15px] leading-relaxed mb-6">
+                    {sol.description}
+                  </p>
+                  <div className="rounded-2xl overflow-hidden bg-black/40 border border-white/5 aspect-video relative">
+                    <Image
+                      src={sol.image}
+                      alt={sol.title.replace('\n', ' ')}
+                      width={600}
+                      height={340}
+                      className="w-full h-full object-cover opacity-85 transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                  </div>
+                </SpotlightCard>
+              </Reveal>
             ))}
           </div>
         </div>

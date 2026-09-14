@@ -21,7 +21,7 @@ import { Pricing } from './globals/Pricing'
 import { CTA } from './globals/CTA'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
-// import Benefits from './components/Benefits'
+import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -32,9 +32,20 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: '— Creative Marketing CMS',
+      description: 'Creative Marketing Agency Content Management Platform',
+    },
+    components: {
+      graphics: {
+        Logo: './components/admin/Logo',
+        Icon: './components/admin/Icon',
+      },
+      beforeDashboard: ['./components/admin/DashboardBanner'],
+    },
   },
   collections: [Users, Media, Categories, Projects],
-  globals: [Solutions, Hero, Partners, Features, KeyFeatures, BusinessSolutions, Benefits, Testimonials, Pricing, CTA, Footer, Header],
+  globals: [SiteSettings, Solutions, Hero, Partners, Features, KeyFeatures, BusinessSolutions, Benefits, Testimonials, Pricing, CTA, Footer, Header],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'creativemarketing_payload_secret_key_2026_secure',
   typescript: {

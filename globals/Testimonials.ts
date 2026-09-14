@@ -1,9 +1,11 @@
 import type { GlobalConfig } from 'payload'
+import { sectionControlFields } from './shared/sectionControls'
 
 export const Testimonials: GlobalConfig = {
     slug: 'testimonials',
 
     fields: [
+        ...sectionControlFields,
         {
             name: 'eyebrow',
             type: 'text',

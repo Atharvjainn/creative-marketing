@@ -92,6 +92,7 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    'site-settings': SiteSetting;
     solutions: Solution;
     hero: Hero;
     partners: Partner;
@@ -106,6 +107,7 @@ export interface Config {
     header: Header;
   };
   globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     solutions: SolutionsSelect<false> | SolutionsSelect<true>;
     hero: HeroSelect<false> | HeroSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
@@ -502,10 +504,43 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  /**
+   * Main brand/business name
+   */
+  siteName: string;
+  /**
+   * Default browser tab title and SEO title
+   */
+  metaTitle: string;
+  /**
+   * Search engine preview description
+   */
+  metaDescription: string;
+  /**
+   * Social sharing preview image (OpenGraph)
+   */
+  ogImage?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "solutions".
  */
 export interface Solution {
   id: number;
+  /**
+   * Toggle OFF to hide this section from the website
+   */
+  enabled?: boolean | null;
+  /**
+   * Choose how this section animates into view on scroll
+   */
+  animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   eyebrow: string;
   heading: string;
   description: string;
@@ -526,6 +561,14 @@ export interface Solution {
  */
 export interface Hero {
   id: number;
+  /**
+   * Toggle OFF to hide this section from the website
+   */
+  enabled?: boolean | null;
+  /**
+   * Choose how this section animates into view on scroll
+   */
+  animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   heading: string;
   trustText: string;
   description: string;
@@ -552,6 +595,14 @@ export interface Hero {
  */
 export interface Partner {
   id: number;
+  /**
+   * Toggle OFF to hide this section from the website
+   */
+  enabled?: boolean | null;
+  /**
+   * Choose how this section animates into view on scroll
+   */
+  animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   eyebrow: string;
   heading: string;
   partners?:
@@ -570,6 +621,14 @@ export interface Partner {
  */
 export interface Feature {
   id: number;
+  /**
+   * Toggle OFF to hide this section from the website
+   */
+  enabled?: boolean | null;
+  /**
+   * Choose how this section animates into view on scroll
+   */
+  animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   eyebrow: string;
   heading: string;
   description: string;
@@ -590,6 +649,14 @@ export interface Feature {
  */
 export interface KeyFeature {
   id: number;
+  /**
+   * Toggle OFF to hide this section from the website
+   */
+  enabled?: boolean | null;
+  /**
+   * Choose how this section animates into view on scroll
+   */
+  animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   eyebrow: string;
   heading: string;
   description: string;
@@ -617,6 +684,14 @@ export interface KeyFeature {
  */
 export interface BusinessSolution {
   id: number;
+  /**
+   * Toggle OFF to hide this section from the website
+   */
+  enabled?: boolean | null;
+  /**
+   * Choose how this section animates into view on scroll
+   */
+  animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   eyebrow: string;
   heading: string;
   description: string;
@@ -637,6 +712,14 @@ export interface BusinessSolution {
  */
 export interface Benefit {
   id: number;
+  /**
+   * Toggle OFF to hide this section from the website
+   */
+  enabled?: boolean | null;
+  /**
+   * Choose how this section animates into view on scroll
+   */
+  animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   eyebrow: string;
   heading: string;
   stats?:
@@ -655,6 +738,14 @@ export interface Benefit {
  */
 export interface Testimonial {
   id: number;
+  /**
+   * Toggle OFF to hide this section from the website
+   */
+  enabled?: boolean | null;
+  /**
+   * Choose how this section animates into view on scroll
+   */
+  animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   eyebrow: string;
   heading: string;
   items?:
@@ -675,6 +766,14 @@ export interface Testimonial {
  */
 export interface Pricing {
   id: number;
+  /**
+   * Toggle OFF to hide this section from the website
+   */
+  enabled?: boolean | null;
+  /**
+   * Choose how this section animates into view on scroll
+   */
+  animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   eyebrow: string;
   heading: string;
   plans?:
@@ -706,6 +805,14 @@ export interface Pricing {
  */
 export interface Cta {
   id: number;
+  /**
+   * Toggle OFF to hide this section from the website
+   */
+  enabled?: boolean | null;
+  /**
+   * Choose how this section animates into view on scroll
+   */
+  animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   heading: string;
   primaryButton: {
     label: string;
@@ -769,9 +876,24 @@ export interface Header {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  metaTitle?: T;
+  metaDescription?: T;
+  ogImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "solutions_select".
  */
 export interface SolutionsSelect<T extends boolean = true> {
+  enabled?: T;
+  animationDirection?: T;
   eyebrow?: T;
   heading?: T;
   description?: T;
@@ -796,6 +918,8 @@ export interface SolutionsSelect<T extends boolean = true> {
  * via the `definition` "hero_select".
  */
 export interface HeroSelect<T extends boolean = true> {
+  enabled?: T;
+  animationDirection?: T;
   heading?: T;
   trustText?: T;
   description?: T;
@@ -826,6 +950,8 @@ export interface HeroSelect<T extends boolean = true> {
  * via the `definition` "partners_select".
  */
 export interface PartnersSelect<T extends boolean = true> {
+  enabled?: T;
+  animationDirection?: T;
   eyebrow?: T;
   heading?: T;
   partners?:
@@ -844,6 +970,8 @@ export interface PartnersSelect<T extends boolean = true> {
  * via the `definition` "features_select".
  */
 export interface FeaturesSelect<T extends boolean = true> {
+  enabled?: T;
+  animationDirection?: T;
   eyebrow?: T;
   heading?: T;
   description?: T;
@@ -864,6 +992,8 @@ export interface FeaturesSelect<T extends boolean = true> {
  * via the `definition` "key-features_select".
  */
 export interface KeyFeaturesSelect<T extends boolean = true> {
+  enabled?: T;
+  animationDirection?: T;
   eyebrow?: T;
   heading?: T;
   description?: T;
@@ -893,6 +1023,8 @@ export interface KeyFeaturesSelect<T extends boolean = true> {
  * via the `definition` "business-solutions_select".
  */
 export interface BusinessSolutionsSelect<T extends boolean = true> {
+  enabled?: T;
+  animationDirection?: T;
   eyebrow?: T;
   heading?: T;
   description?: T;
@@ -913,6 +1045,8 @@ export interface BusinessSolutionsSelect<T extends boolean = true> {
  * via the `definition` "benefits_select".
  */
 export interface BenefitsSelect<T extends boolean = true> {
+  enabled?: T;
+  animationDirection?: T;
   eyebrow?: T;
   heading?: T;
   stats?:
@@ -931,6 +1065,8 @@ export interface BenefitsSelect<T extends boolean = true> {
  * via the `definition` "testimonials_select".
  */
 export interface TestimonialsSelect<T extends boolean = true> {
+  enabled?: T;
+  animationDirection?: T;
   eyebrow?: T;
   heading?: T;
   items?:
@@ -951,6 +1087,8 @@ export interface TestimonialsSelect<T extends boolean = true> {
  * via the `definition` "pricing_select".
  */
 export interface PricingSelect<T extends boolean = true> {
+  enabled?: T;
+  animationDirection?: T;
   eyebrow?: T;
   heading?: T;
   plans?:
@@ -984,6 +1122,8 @@ export interface PricingSelect<T extends boolean = true> {
  * via the `definition` "cta_select".
  */
 export interface CtaSelect<T extends boolean = true> {
+  enabled?: T;
+  animationDirection?: T;
   heading?: T;
   primaryButton?:
     | T

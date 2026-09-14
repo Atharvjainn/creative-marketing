@@ -1,1 +1,72 @@
-/* Payload CMS Custom Styles */
+/* Payload CMS Custom Styling - Creative Marketing Theme */
+
+:root {
+  --theme-primary-50: #fff5ed;
+  --theme-primary-100: #ffe8d5;
+  --theme-primary-200: #ffd0ab;
+  --theme-primary-300: #ffb076;
+  --theme-primary-400: #ff853c;
+  --theme-primary-500: #ea580c;
+  --theme-primary-600: #c2410c;
+  --theme-primary-700: #9a3412;
+  --theme-primary-800: #7c2d12;
+  --theme-primary-900: #431407;
+}
+
+[data-theme='dark'] {
+  --theme-elevation-0: #080200;
+  --theme-elevation-50: #0e0401;
+  --theme-elevation-100: #150702;
+  --theme-elevation-150: #1c0a03;
+  --theme-elevation-200: #250d04;
+  --theme-elevation-250: #301106;
+}
+
+/* Custom Scrollbars for Admin */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #080200;
+}
+::-webkit-scrollbar-thumb {
+  background: #431407;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ea580c;
+}
+
+/* Fix logo & sidebar spacing to avoid text collisions */
+.nav__brand {
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 24px !important;
+  padding-bottom: 12px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  text-decoration: none !important;
+}
+
+.graphic-logo {
+  display: flex !important;
+  align-items: center !important;
+  height: 32px !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+
+.graphic-icon {
+  display: flex !important;
+  align-items: center !important;
+  height: 28px !important;
+  overflow: visible !important;
+}
+
+.nav {
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.template-default {
+  background: #080200;
+}

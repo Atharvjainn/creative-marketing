@@ -1,9 +1,11 @@
 import type { GlobalConfig } from 'payload'
+import { sectionControlFields } from './shared/sectionControls'
 
 export const Hero: GlobalConfig = {
     slug: 'hero',
 
     fields: [
+        ...sectionControlFields,
         {
             name: 'heading',
             type: 'text',

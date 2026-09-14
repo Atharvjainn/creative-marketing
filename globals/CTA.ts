@@ -1,9 +1,11 @@
 import type { GlobalConfig } from 'payload'
+import { sectionControlFields } from './shared/sectionControls'
 
 export const CTA: GlobalConfig = {
     slug: 'cta',
 
     fields: [
+        ...sectionControlFields,
         {
             name: 'heading',
             type: 'textarea',

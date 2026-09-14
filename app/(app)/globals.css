@@ -25,18 +25,41 @@ body {
   overflow-x: hidden;
 }
 
+/* Custom Luxury Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0D0200;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4A1504;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8A3410;
+}
+
+/* Selection Highlight */
+::selection {
+  background: rgba(200, 69, 16, 0.4);
+  color: #ffffff;
+}
+
 .section-label {
   font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
+  font-weight: 600;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  opacity: 0.8;
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -45,18 +68,68 @@ body {
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
+  0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
 }
 
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.06); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes auroraFlow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.08); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
 .animate-fadeInUp {
-  animation: fadeInUp 0.7s ease forwards;
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.marquee-track {
-  animation: marquee 30s linear infinite;
+.animate-pulseGlow {
+  animation: pulseGlow 5s ease-in-out infinite;
 }
 
-.marquee-track:hover {
+.animate-floatSlow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+.animate-auroraFlow {
+  animation: auroraFlow 10s ease-in-out infinite;
+}
+
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+.marquee-content {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 100%;
+  animation: marquee 28s linear infinite;
+}
+
+.marquee-container:hover .marquee-content {
   animation-play-state: paused;
 }
+
+.glass-panel {
+  background: rgba(28, 10, 3, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+

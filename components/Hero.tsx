@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { getPayloadClient } from "@/lib/payload";
+import Reveal from "./animations/Reveal";
 
 const defaultAvatars = [
   "https://files.peachworlds.com/website/ffb41913-0004-4a71-b48c-757fe7c42dfb/4.png",
@@ -17,8 +18,11 @@ export default async function Hero() {
       return null;
     });
 
+  if (data?.enabled === false) return null;
+  const animDir = (data?.animationDirection as "up" | "down" | "left" | "right" | "zoom" | "none") || "up";
+
   const heading = data?.heading || "Elevate your\nmarketing with\nAI Solutions.";
-  const trustText = data?.trustText || "Trusted by 10k+ businesses";
+  const trustText = data?.trustText || "Trusted by 10,000+ businesses worldwide";
   const description =
     data?.description ||
     "Discover how our AI-driven strategies transform your marketing, delivering unparalleled results and efficiency.";
@@ -33,27 +37,35 @@ export default async function Hero() {
     url: "#solutions",
   };
 
-  const avatars: string[] =
+  const rawAvatars =
     data?.avatars && data.avatars.length > 0
       ? data.avatars
-          .map((a) => {
-            if (typeof a.image === "object" && a.image && "url" in a.image && typeof a.image.url === "string") {
-              return a.image.url;
-            }
-            return "";
-          })
-          .filter(Boolean)
+        .map((a) => {
+          if (typeof a.image === "object" && a.image && "url" in a.image && typeof a.image.url === "string") {
+            return a.image.url;
+          }
+          return "";
+        })
+        .filter(Boolean)
       : defaultAvatars;
 
+  const displayAvatars = rawAvatars.slice(0, 5);
+  const extraCount = rawAvatars.length > 5 ? rawAvatars.length - 5 : 0;
+
   return (
-    <section className="relative min-h-screen flex flex-col overflow-hidden">
-      {/* Warm orange gradient background — matches original */}
+    <section className="relative min-h-screen flex flex-col overflow-hidden justify-end">
+      {/* Warm orange gradient background */}
       <div
         className="absolute inset-0"
         style={{
           background:
             "radial-gradient(ellipse at 62% 0%, #C84510 0%, #9B2E06 28%, #4A1000 58%, #0E0200 85%)",
         }}
+      />
+
+      {/* Ambient floating aurora lights */}
+      <div
+        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-orange-600/20 blur-3xl pointer-events-none animate-auroraFlow"
       />
 
       {/* Additional warmth layer */}
@@ -65,9 +77,9 @@ export default async function Hero() {
         }}
       />
 
-      {/* Disc image — right side (closest static image to original 3D coin render) */}
+      {/* Disc image — right side with subtle hover enlarge only */}
       <div
-        className="absolute inset-y-0 right-[-5%] w-[70%] md:w-[65%]"
+        className="absolute inset-y-0 right-[-5%] w-[70%] md:w-[65%] transition-transform duration-700 ease-out hover:scale-[1.03]"
         style={{
           backgroundImage: `url(https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp)`,
           backgroundSize: "cover",
@@ -81,7 +93,7 @@ export default async function Hero() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to right, rgba(12,2,0,0.78) 0%, rgba(12,2,0,0.35) 42%, transparent 65%)",
+            "linear-gradient(to right, rgba(12,2,0,0.85) 0%, rgba(12,2,0,0.45) 45%, transparent 70%)",
         }}
       />
 
@@ -90,77 +102,103 @@ export default async function Hero() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to top, rgba(8,1,0,0.65) 0%, transparent 40%)",
+            "linear-gradient(to top, rgba(8,1,0,0.75) 0%, transparent 40%)",
         }}
       />
 
       {/* Content */}
       <div
-        className="relative z-10 flex flex-col justify-end min-h-screen max-w-[1400px] w-full"
-        style={{
-          marginLeft: "auto",
-          marginRight: "auto",
-          paddingLeft: "24px",
-          paddingRight: "24px",
-          paddingBottom: "96px",
-        }}
+        className="relative z-10 max-w-[1400px] w-full mx-auto px-6 pb-20 md:pb-28 pt-36"
       >
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-          {/* Left: headline */}
-          <div className="max-w-[620px]">
-            <h1
-              className="text-white font-medium leading-none whitespace-pre-line"
-              style={{ fontSize: "clamp(48px, 5vw, 76px)", lineHeight: 1 }}
-            >
-              {heading}
-            </h1>
-            <div className="mt-5">
-              <p className="text-white/80 text-[14px] mb-3">{trustText}</p>
-              <div className="flex items-center">
-                {avatars.map((src, i) => (
-                  <div
-                    key={i}
-                    className="w-9 h-9 rounded-full overflow-hidden border-2 border-white/20 bg-neutral-700 shrink-0"
-                    style={{
-                      marginLeft: i > 0 ? "-10px" : 0,
-                      zIndex: avatars.length - i,
-                    }}
-                  >
-                    <Image
-                      src={src}
-                      alt={`user ${i + 1}`}
-                      width={36}
-                      height={36}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-10">
+          {/* Left: badge + headline + social proof */}
+          <div className="max-w-[660px]">
+            {/* Pill Badge */}
+            {/* <Reveal direction="down" delay={50} duration={600}>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 backdrop-blur-md mb-6 shadow-lg shadow-orange-950/40">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                <span className="text-[12px] font-medium tracking-wide text-white/90">
+                  Next-Gen AI Marketing Engine
+                </span>
               </div>
-            </div>
+            </Reveal> */}
+
+            <Reveal direction="up" delay={150} duration={800}>
+              <h1
+                className="text-white font-medium leading-[1.03] tracking-tight whitespace-pre-line text-balance"
+                style={{ fontSize: "clamp(44px, 5.5vw, 76px)" }}
+              >
+                {heading}
+              </h1>
+            </Reveal>
+
+            {/* Social proof stack */}
+            <Reveal direction="up" delay={300} duration={800}>
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <div className="flex items-center">
+                  {displayAvatars.map((src, i) => (
+                    <div
+                      key={i}
+                      className="w-10 h-10 rounded-full overflow-hidden border-2 border-orange-900/60 bg-neutral-800 shrink-0 shadow-md hover:scale-110 hover:z-20 transition-transform duration-200"
+                      style={{
+                        marginLeft: i > 0 ? "-12px" : 0,
+                        zIndex: displayAvatars.length - i,
+                      }}
+                    >
+                      <Image
+                        src={src}
+                        alt={`user ${i + 1}`}
+                        width={40}
+                        height={40}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+                  {extraCount > 0 && (
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center bg-orange-950/90 border-2 border-white/20 text-white text-[12px] font-bold shrink-0"
+                      style={{ marginLeft: "-12px", zIndex: 0 }}
+                    >
+                      +{extraCount}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-1 text-amber-400 text-xs">
+                    {"★".repeat(5)}
+                    <span className="text-white text-xs font-semibold ml-1">4.9/5</span>
+                  </div>
+                  <p className="text-white/70 text-[13px] tracking-tight">{trustText}</p>
+                </div>
+              </div>
+            </Reveal>
           </div>
 
-          {/* Right: description + CTA */}
-          <div className="max-w-[400px]">
-            <p className="text-white/80 text-[15px] mb-6 leading-relaxed">
-              {description}
-            </p>
-            <div className="flex items-center gap-3">
-              <a
-                href={primaryButton.url}
-                className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-full text-[14px] font-medium hover:bg-neutral-100 transition-colors"
-              >
-                {primaryButton.label}
-                <span className="w-5 h-5 rounded-full bg-black flex items-center justify-center text-white text-xs">
-                  ›
-                </span>
-              </a>
-              <a
-                href={secondaryButton.url}
-                className="flex items-center gap-2 bg-white/15 text-white px-6 py-3 rounded-full text-[14px] font-medium hover:bg-white/25 transition-colors backdrop-blur-sm"
-              >
-                {secondaryButton.label}
-              </a>
-            </div>
+          {/* Right: description + CTAs */}
+          <div className="max-w-[420px]">
+            <Reveal direction="up" delay={350} duration={800}>
+              <p className="text-white/80 text-[16px] mb-8 leading-relaxed">
+                {description}
+              </p>
+              <div className="flex items-center gap-3.5">
+                <a
+                  href={primaryButton.url}
+                  className="group flex items-center gap-2.5 bg-white text-black px-7 py-3.5 rounded-full text-[14px] font-semibold hover:bg-neutral-100 hover:shadow-xl hover:shadow-orange-500/25 hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  {primaryButton.label}
+                  <span className="w-5 h-5 rounded-full bg-black flex items-center justify-center text-white text-xs transition-transform duration-200 group-hover:translate-x-1">
+                    ›
+                  </span>
+                </a>
+                <a
+                  href={secondaryButton.url}
+                  className="flex items-center gap-2 bg-white/10 text-white px-7 py-3.5 rounded-full text-[14px] font-medium hover:bg-white/20 hover:-translate-y-0.5 border border-white/15 transition-all duration-200 backdrop-blur-md"
+                >
+                  {secondaryButton.label}
+                </a>
+              </div>
+            </Reveal>
           </div>
         </div>
       </div>

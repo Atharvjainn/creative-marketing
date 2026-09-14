@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { getPayloadClient } from "@/lib/payload";
+import Reveal from "./animations/Reveal";
 
 const defaultKeyFeatures = [
   {
@@ -43,6 +44,9 @@ export default async function KeyFeatures() {
       return null;
     });
 
+  if (data?.enabled === false) return null;
+  const animDir = (data?.animationDirection as "up" | "down" | "left" | "right" | "zoom" | "none") || "up";
+
   const eyebrow = data?.eyebrow || "ABOUT OUR PLATFORM";
   const heading = data?.heading || "Key Features";
   const description =
@@ -57,13 +61,18 @@ export default async function KeyFeatures() {
             imageUrl = feature.image.url;
           }
           const defaultItem = defaultKeyFeatures[i % defaultKeyFeatures.length];
+          // Auto-alternate image position if not explicitly set
+          const isLeft = feature.imageLeft !== undefined && feature.imageLeft !== null
+            ? Boolean(feature.imageLeft)
+            : i % 2 === 1;
+
           return {
             number: feature.number || `0${i + 1}`,
             label: feature.label || `FEATURE ${i + 1}`,
             title: feature.title || defaultItem.title,
             description: feature.description || defaultItem.description,
             image: imageUrl || defaultItem.image,
-            imageLeft: Boolean(feature.imageLeft),
+            imageLeft: isLeft,
             button: {
               label: feature.button?.label || "Get Started",
               url: feature.button?.url || "#",
@@ -73,27 +82,33 @@ export default async function KeyFeatures() {
       : defaultKeyFeatures;
 
   return (
-    <section id="ai-power" className="bg-black">
+    <section id="ai-power" className="bg-black relative">
       {/* Section heading */}
-      <div className="max-w-[1400px] mx-auto px-6 pt-24 pb-12">
-        <p className="section-label text-white/40 mb-3">{eyebrow}</p>
-        <h2
-          className="text-white font-medium whitespace-pre-line"
-          style={{ fontSize: "clamp(48px, 6vw, 80px)", lineHeight: 1 }}
-        >
-          {heading}
-        </h2>
-        <p className="text-white/50 text-[15px] mt-4 max-w-[440px] leading-relaxed">
-          {description}
-        </p>
+      <div className="max-w-[1400px] mx-auto px-6 pt-24 pb-16">
+        <Reveal direction="up" delay={50}>
+          <p className="section-label text-orange-400 mb-3">{eyebrow}</p>
+        </Reveal>
+        <Reveal direction="up" delay={150}>
+          <h2
+            className="text-white font-medium whitespace-pre-line tracking-tight leading-[1.03]"
+            style={{ fontSize: "clamp(44px, 6vw, 80px)" }}
+          >
+            {heading}
+          </h2>
+        </Reveal>
+        <Reveal direction="up" delay={250}>
+          <p className="text-white/60 text-[16px] mt-4 max-w-[480px] leading-relaxed">
+            {description}
+          </p>
+        </Reveal>
       </div>
 
-      {/* Feature items */}
+      {/* Feature items with auto-alternating layout */}
       {items.map((feature, i) => (
         <div
           key={`${feature.number}-${i}`}
-          className="border-t border-white/10"
-          style={{ background: i % 2 === 0 ? "#000" : "#050505" }}
+          className="border-t border-white/10 relative overflow-hidden"
+          style={{ background: i % 2 === 0 ? "#000000" : "#080201" }}
         >
           <div className="max-w-[1400px] mx-auto px-6 py-20 md:py-28">
             <div
@@ -102,47 +117,53 @@ export default async function KeyFeatures() {
               }`}
             >
               {/* Text */}
-              <div>
-                <p className="section-label text-white/40 mb-4">{feature.label}</p>
-                <h3
-                  className="text-white font-medium mb-5 whitespace-pre-line"
-                  style={{ fontSize: "clamp(28px, 4vw, 52px)", lineHeight: 1.05 }}
-                >
-                  {feature.title}
-                </h3>
-                <p className="text-white/55 text-[15px] leading-relaxed mb-8 max-w-[400px]">
-                  {feature.description}
-                </p>
-                <a
-                  href={feature.button?.url || "#"}
-                  className="inline-flex items-center gap-2 text-white text-[14px] font-medium group"
-                >
-                  {feature.button?.label || "Get Started"}
-                  <span className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-white text-xs transition-all group-hover:bg-white/20">
-                    ›
-                  </span>
-                </a>
-              </div>
+              <Reveal direction={feature.imageLeft ? "left" : "right"} duration={800}>
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-orange-400 text-xs font-mono mb-5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+                    {feature.label}
+                  </div>
+
+                  <h3
+                    className="text-white font-medium mb-5 whitespace-pre-line tracking-tight text-balance leading-[1.08]"
+                    style={{ fontSize: "clamp(30px, 4vw, 52px)" }}
+                  >
+                    {feature.title}
+                  </h3>
+                  <p className="text-white/65 text-[16px] leading-relaxed mb-8 max-w-[440px]">
+                    {feature.description}
+                  </p>
+                  <a
+                    href={feature.button?.url || "#"}
+                    className="group inline-flex items-center gap-2.5 text-white text-[14px] font-semibold hover:text-orange-300 transition-colors"
+                  >
+                    {feature.button?.label || "Get Started"}
+                    <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white text-xs transition-all duration-200 group-hover:bg-orange-500 group-hover:text-black group-hover:translate-x-1">
+                      ›
+                    </span>
+                  </a>
+                </div>
+              </Reveal>
 
               {/* Image */}
-              <div className="relative">
-                {/* Feature number */}
-                <span
-                  className="absolute top-4 left-4 z-10 text-white/30 text-[13px] font-medium"
-                  style={{ fontVariantNumeric: "tabular-nums" }}
-                >
-                  {feature.number}
-                </span>
-                <div className="rounded-2xl overflow-hidden">
-                  <Image
-                    src={feature.image}
-                    alt={feature.title}
-                    width={800}
-                    height={600}
-                    className="w-full h-auto object-cover"
-                  />
+              <Reveal direction="zoom" delay={150} duration={800}>
+                <div className="relative group">
+                  {/* Feature number badge */}
+                  <div className="absolute top-5 left-5 z-10 w-11 h-11 rounded-full bg-black/70 backdrop-blur-md border border-white/20 flex items-center justify-center text-white text-[13px] font-mono font-bold shadow-lg">
+                    {feature.number}
+                  </div>
+
+                  <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-orange-950/20 bg-neutral-900">
+                    <Image
+                      src={feature.image}
+                      alt={feature.title}
+                      width={800}
+                      height={600}
+                      className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                  </div>
                 </div>
-              </div>
+              </Reveal>
             </div>
           </div>
         </div>

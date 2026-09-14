@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
+import { getPayloadClient } from "@/lib/payload";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -8,16 +9,40 @@ const dmSans = DM_Sans({
   weight: ["300", "400", "500", "600"],
 });
 
-export const metadata: Metadata = {
-  title: "Creative Marketing Agency – AI-Powered Marketing Solutions",
-  description:
-    "Elevate your marketing with AI Solutions. Discover how our AI-driven strategies transform your marketing, delivering unparalleled results and efficiency. Trusted by 10k+ businesses.",
-  openGraph: {
-    title: "Creative Marketing Agency – AI-Powered Marketing Solutions",
-    description: "Elevate your marketing with AI Solutions. Trusted by 10k+ businesses.",
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const payload = await getPayloadClient().catch(() => null);
+  const siteSettings = payload
+    ? await payload.findGlobal({ slug: "site-settings" }).catch(() => null)
+    : null;
+
+  const title =
+    siteSettings?.metaTitle ||
+    "Creative Marketing Agency | Next-Gen AI Marketing Solutions";
+  const description =
+    siteSettings?.metaDescription ||
+    "Elevate your marketing with AI Solutions. Discover how our AI-driven strategies transform your marketing with unparalleled efficiency.";
+
+  let ogImageUrl = "";
+  if (
+    typeof siteSettings?.ogImage === "object" &&
+    siteSettings.ogImage &&
+    "url" in siteSettings.ogImage &&
+    typeof siteSettings.ogImage.url === "string"
+  ) {
+    ogImageUrl = siteSettings.ogImage.url;
+  }
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      images: ogImageUrl ? [{ url: ogImageUrl }] : [],
+    },
+  };
+}
 
 export default function RootLayout({
   children,
