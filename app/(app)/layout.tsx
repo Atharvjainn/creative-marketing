@@ -3,6 +3,7 @@ import { DM_Sans } from "next/font/google";
 import { getPayloadClient } from "@/lib/payload";
 import SmoothScroll from "@/components/animations/SmoothScroll";
 import "./globals.css";
+import GsapScroll from "@/components/animations/GSAPScroll";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -53,6 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={dmSans.variable}>
       <body className={dmSans.className}>
+        <GsapScroll />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
