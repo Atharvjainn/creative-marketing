@@ -55,37 +55,12 @@ export default async function Partners() {
       : "https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp";
 
   return (
-    <section id="partners" className="relative overflow-hidden py-20 md:py-28">
-      {/* Uniform light peach base */}
-      <div
-        className="absolute inset-0"
-        style={{ background: "#EEC0B0" }}
-      />
-
-      {/* Disc image — right half */}
-      <div
-        className="absolute inset-y-0 right-0 w-[55%]"
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center left",
-          opacity: 0.9,
-        }}
-      />
-
-      {/* Bright lens-flare glow on left */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "radial-gradient(ellipse at 20% 40%, rgba(255,240,220,0.55) 0%, transparent 50%)",
-        }}
-      />
-
+    <section id="partners" className="relative overflow-hidden py-24 md:py-32">
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12">
         <div className="text-center mb-14">
-          <p className="section-label text-orange-950/80 mb-3">{eyebrow}</p>
+          <p className="section-label text-orange-400/90 mb-3">{eyebrow}</p>
           <h2
-            className="text-black font-medium whitespace-pre-line tracking-tight"
+            className="text-white font-medium whitespace-pre-line tracking-tight"
             style={{ fontSize: "clamp(32px, 4.5vw, 56px)", lineHeight: 1.1 }}
           >
             {heading}

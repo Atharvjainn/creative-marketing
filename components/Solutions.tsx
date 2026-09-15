@@ -48,29 +48,9 @@ export default async function Solutions() {
       : "https://files.peachworlds.com/website/2f46c3a8-f9be-44cf-b56b-5a631f4fa3f7/dash.png";
 
   return (
-    <section id="solutions" className="relative overflow-hidden pt-12">
-      {/* Orange gradient background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 60% 0%, #C84510 0%, #9B2E06 28%, #4A1000 58%, #0E0200 100%)",
-        }}
-      />
-
-      {/* Disc photo overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          opacity: 0.85,
-        }}
-      />
-
+    <section id="solutions" className="relative pt-16 md:pt-24 pb-12">
       {/* Frosted glass card */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 pt-16 md:pt-20">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6">
         <Reveal direction="up" duration={800}>
           <div
             className="rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/20"
