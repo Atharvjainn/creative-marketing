@@ -38,7 +38,7 @@ export default buildConfig({
     },
     components: {
       graphics: {
-        // Logo: './components/admin/Logo',
+        Logo: './components/admin/Logo',
         // Icon: './components/admin/Icon',
       },
       beforeDashboard: ['./components/admin/DashboardBanner'],
