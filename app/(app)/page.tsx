@@ -9,6 +9,7 @@ import Benefits from "@/components/Benefits";
 import Testimonials from "@/components/Testimonials";
 import Pricing from "@/components/Pricing";
 import CTA from "@/components/CTA";
+import FrameCanvas from "@/components/animations/FrameCanvas";
 
 export const dynamic = "force-dynamic";
 
@@ -16,9 +17,26 @@ export default function Home() {
   return (
     <main>
       <Header />
-      <Hero />
-      <Solutions />
-      <Partners />
+
+      {/* Hero, Solutions, and Partners with Lenis + GSAP ScrollTrigger Canvas Sequence */}
+      <div id="canvas-scroll-container" className="relative">
+        <FrameCanvas
+          totalFrames={166}
+          frameFolder="/frames_final"
+          triggerSelector="#canvas-scroll-container"
+        />
+        <div className="relative z-10">
+          <Hero />
+
+          {/* Cinematic Canvas Showcase Spacer: allows the background 3D frame animation to play with full unobstructed view */}
+          <div className="min-h-[70vh] md:min-h-[100vh] flex items-center justify-center pointer-events-none" />
+
+          <Solutions />
+          <Partners />
+        </div>
+      </div>
+
+      {/* Subsequent Website Sections */}
       <Features />
       <KeyFeatures />
       <BusinessSolutions />
