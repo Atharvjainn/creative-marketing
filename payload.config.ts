@@ -22,6 +22,7 @@ import { CTA } from './globals/CTA'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
 import { SiteSettings } from './globals/SiteSettings'
+import { Blogs } from './collections/Blogs'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -44,7 +45,7 @@ export default buildConfig({
       beforeDashboard: ['./components/admin/DashboardBanner'],
     },
   },
-  collections: [Users, Media, Categories, Projects],
+  collections: [Users, Media, Categories, Projects, Blogs],
   globals: [SiteSettings, Solutions, Hero, Partners, Features, KeyFeatures, BusinessSolutions, Benefits, Testimonials, Pricing, CTA, Footer, Header],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'creativemarketing_payload_secret_key_2026_secure',

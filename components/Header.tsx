@@ -6,6 +6,7 @@ const defaultNav = [
   { label: "Features", url: "#features" },
   { label: "AI Power", url: "#ai-power" },
   { label: "Pricing", url: "#pricing" },
+  { label: "Blog", url: "/blog" },
 ];
 
 export default async function Header() {
@@ -22,9 +23,9 @@ export default async function Header() {
   const navigation =
     data?.navigation && data.navigation.length > 0
       ? data.navigation.map((item) => ({
-          label: item.label,
-          url: item.url || "#",
-        }))
+        label: item.label,
+        url: item.url || "#",
+      }))
       : defaultNav;
 
   const cta = data?.cta || {
