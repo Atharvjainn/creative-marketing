@@ -20,7 +20,7 @@ export default function HeaderClient({
       <div className="max-w-[1400px] w-full mx-auto flex items-center justify-between px-6 py-5">
         {/* Logo */}
         <a
-          href="#"
+          href="/"
           className="
             text-white
             text-[22px]

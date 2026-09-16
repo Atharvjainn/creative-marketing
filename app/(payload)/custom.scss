@@ -1,4 +1,4 @@
-/* Payload CMS Custom Styling - Creative Marketing Theme */
+/* Payload CMS Custom Styling - Creative Marketing Luxury Theme */
 
 :root {
   --theme-primary-50: #fff5ed;
@@ -14,12 +14,15 @@
 }
 
 [data-theme='dark'] {
-  --theme-elevation-0: #080200;
-  --theme-elevation-50: #0e0401;
-  --theme-elevation-100: #150702;
-  --theme-elevation-150: #1c0a03;
-  --theme-elevation-200: #250d04;
-  --theme-elevation-250: #301106;
+  --theme-elevation-0: #0a0301;
+  --theme-elevation-50: #100502;
+  --theme-elevation-100: #180803;
+  --theme-elevation-150: #200b04;
+  --theme-elevation-200: #2a0f06;
+  --theme-elevation-250: #351308;
+  --theme-success-500: #10b981;
+  --theme-warning-500: #f59e0b;
+  --theme-error-500: #ef4444;
 }
 
 /* Custom Scrollbars for Admin */
@@ -32,18 +35,18 @@
 }
 ::-webkit-scrollbar-thumb {
   background: #431407;
-  border-radius: 4px;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #ea580c;
 }
 
-/* Fix logo & sidebar spacing to avoid text collisions */
+/* Sidebar & Navigation Polish */
 .nav__brand {
   display: flex !important;
   align-items: center !important;
   margin-bottom: 24px !important;
-  padding-bottom: 12px !important;
+  padding-bottom: 16px !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
   text-decoration: none !important;
 }
@@ -65,8 +68,88 @@
 
 .nav {
   border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: #0d0401 !important;
+}
+
+.nav__group-label {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.nav__link:hover,
+.nav__link--active {
+  color: #ff853c !important;
+}
+
+/* Card & Table Styling */
+.card {
+  border-radius: 14px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  transition: all 0.2s ease !important;
+}
+
+.card:hover {
+  border-color: rgba(234, 88, 12, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.table tr:hover td {
+  background-color: rgba(234, 88, 12, 0.04) !important;
+}
+
+/* Inputs & Form Controls */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+textarea,
+select {
+  border-radius: 10px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #ea580c !important;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.2) !important;
+  outline: none !important;
+}
+
+/* Action Buttons */
+.btn--style-primary {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.btn--style-primary:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 20px rgba(234, 88, 12, 0.5) !important;
+}
+
+.btn--style-secondary {
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  font-weight: 500 !important;
+}
+
+/* Header & Breadcrumbs */
+.app-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(13, 4, 1, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
 }
 
 .template-default {
-  background: #080200;
+  background: #0a0301 !important;
 }
