@@ -84,38 +84,16 @@ export default async function CTA() {
       : defaultSocialLinks;
 
   return (
-    <section id="cta" className="relative overflow-hidden" style={{ minHeight: "90vh" }}>
-      {/* Full background: disc/petri dish image — warm peach/cream tones match original CTA */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-
-      {/* Warm peach overlay — lightens the image to match original's soft warm tone */}
-      <div
-        className="absolute inset-0"
-        style={{ background: "rgba(240, 190, 160, 0.25)" }}
-      />
-
-      {/* Left dark scrim for text readability */}
-      <div
-        className="absolute inset-0"
-        style={{ background: "linear-gradient(to right, rgba(10,3,0,0.45) 0%, transparent 60%)" }}
-      />
-
-      {/* Content - vertically spread: text at top, footer at bottom */}
-      <div className="relative z-10 h-full flex flex-col justify-between" style={{ minHeight: ctaData?.enabled === false ? "auto" : "90vh" }}>
+    <section id="cta" className="relative w-full py-12 md:py-16">
+      {/* Content - cohesive compact layout without excessive empty gap */}
+      <div className="relative z-10 max-w-[1320px] mx-auto w-full px-6 sm:px-12 flex flex-col gap-12 md:gap-16">
         {/* CTA text (can be hidden from CMS) */}
         {ctaData?.enabled !== false && (
-          <div className="max-w-[1320px] mx-auto w-full px-6 sm:px-12 pt-28 sm:pt-40">
+          <div>
             <Reveal direction={animDir} delay={50}>
               <h2
-                className="text-white font-medium mb-10 whitespace-pre-line tracking-tight drop-shadow-md"
-                style={{ fontSize: "clamp(40px, 6vw, 80px)", lineHeight: 1 }}
+                className="text-white font-medium mb-8 whitespace-pre-line tracking-tight drop-shadow-md"
+                style={{ fontSize: "clamp(36px, 5vw, 70px)", lineHeight: 1.05 }}
               >
                 {heading}
               </h2>
@@ -142,8 +120,8 @@ export default async function CTA() {
           </div>
         )}
 
-        {/* Footer - at bottom of CTA section */}
-        <div className={`max-w-[1320px] mx-auto w-full px-6 sm:px-12 pb-12 sm:pb-14 ${ctaData?.enabled === false ? "pt-12" : "pt-20"}`}>
+        {/* Footer - cohesive flow below CTA */}
+        <div className="w-full">
           <Reveal direction="up" delay={100}>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-10">
               {/* Brand + Status Indicator */}

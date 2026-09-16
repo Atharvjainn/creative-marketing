@@ -69,30 +69,11 @@ export default async function BusinessSolutions() {
       : "https://files.peachworlds.com/website/351c33a9-2727-4ead-96ba-0e84a1dfccfd/chatgpt-image-jun-15-2026-09-04-22-pm.webp";
 
   return (
-    <section className="relative overflow-hidden py-24 md:py-36">
-      {/* Warm orange gradient background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "radial-gradient(ellipse at 40% 50%, #C04010 0%, #8B2A06 35%, #3D0E00 65%, #0D0100 100%)",
-        }}
-      />
-
-      {/* Abstract disc overlay left side */}
-      <div
-        className="absolute inset-y-0 left-0 w-[55%]"
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "right center",
-          opacity: 0.45,
-        }}
-      />
-
+    <section id="business-solutions" className="relative py-24 md:py-36">
       <div className="relative z-10 max-w-[1320px] mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-start">
-          {/* Left sticky text */}
-          <div className="lg:sticky lg:top-32">
+          {/* Left sticky heading column - stays pinned while right cards scroll past */}
+          <div className="lg:sticky lg:top-28 lg:self-start">
             <Reveal direction="up" delay={50}>
               <p className="section-label text-orange-400 mb-4">{eyebrow}</p>
             </Reveal>
@@ -111,8 +92,8 @@ export default async function BusinessSolutions() {
             </Reveal>
           </div>
 
-          {/* Right scrolling adaptive cards */}
-          <div className="flex flex-col gap-6">
+          {/* Right scrolling adaptive cards - unpinned, scroll naturally */}
+          <div className="flex flex-col gap-7 md:gap-8">
             {items.map((sol, i) => (
               <Reveal
                 key={`${sol.title}-${i}`}
@@ -123,10 +104,10 @@ export default async function BusinessSolutions() {
                 <SpotlightCard
                   className="group rounded-3xl p-7 md:p-9 transition-all duration-300 hover:border-orange-500/40 hover:shadow-2xl hover:shadow-orange-950/40"
                   style={{
-                    background: "rgba(35, 10, 2, 0.70)",
+                    background: "rgba(30, 10, 3, 0.65)",
                     backdropFilter: "blur(20px)",
                     WebkitBackdropFilter: "blur(20px)",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.12)",
                   }}
                 >
                   <div className="flex items-center justify-between mb-4">

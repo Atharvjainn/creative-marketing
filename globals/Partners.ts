@@ -14,8 +14,12 @@ export const Partners: GlobalConfig = {
         },
         {
             name: 'heading',
-            type: 'text',
+            type: 'textarea',
             required: true,
+            defaultValue: 'Collaborating with\nleading brands\nworldwide.',
+            admin: {
+                description: 'Partners section heading (support multiple lines)',
+            },
         },
         {
             name: 'partners',

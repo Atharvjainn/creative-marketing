@@ -616,6 +616,9 @@ export interface Partner {
    */
   animationDirection?: ('up' | 'down' | 'left' | 'right' | 'zoom' | 'none') | null;
   eyebrow: string;
+  /**
+   * Partners section heading (support multiple lines)
+   */
   heading: string;
   partners?:
     | {

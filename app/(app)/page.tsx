@@ -36,14 +36,47 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Subsequent Website Sections */}
+      {/* Intermediary Feature Highlights */}
       <Features />
       <KeyFeatures />
-      <BusinessSolutions />
-      <Benefits />
+
+      {/* Middle Frame Sequence: Business Solutions & Benefits */}
+      <div id="middle-canvas-scroll-container" className="relative">
+        <FrameCanvas
+          totalFrames={135}
+          frameFolder="/frames_middle"
+          filePrefix="frame"
+          triggerSelector="#middle-canvas-scroll-container"
+        />
+        <div className="relative z-10">
+          <BusinessSolutions />
+
+          {/* Cinematic Middle Spacer: provides clear runway for the 3D animation to play unobstructed */}
+          <div className="min-h-[50vh] md:min-h-[80vh] flex items-center justify-center pointer-events-none" />
+
+          <Benefits />
+        </div>
+      </div>
+
+      {/* Subsequent Website Sections */}
       <Testimonials />
       <Pricing />
-      <CTA />
+
+      {/* Footer Frame Sequence: CTA & Footer */}
+      <div id="footer-canvas-scroll-container" className="relative min-h-[160vh]">
+        <FrameCanvas
+          totalFrames={104}
+          frameFolder="/frames_footer"
+          filePrefix="frame"
+          digits={8}
+          triggerSelector="#footer-canvas-scroll-container"
+          startTrigger="top 75%"
+          endTrigger="bottom bottom"
+        />
+        <div className="sticky top-0 min-h-screen flex items-center justify-center relative z-10">
+          <CTA />
+        </div>
+      </div>
     </main>
   );
 }

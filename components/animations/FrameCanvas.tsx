@@ -11,22 +11,39 @@ if (typeof window !== "undefined") {
 interface FrameCanvasProps {
   totalFrames?: number;
   frameFolder?: string;
+  filePrefix?: string;
+  digits?: number;
   triggerSelector?: string;
+  startTrigger?: string;
+  endTrigger?: string;
+  parallaxStartY?: number;
+  parallaxEndY?: number;
+  scaleStart?: number;
+  scaleEnd?: number;
 }
 
 export default function FrameCanvas({
   totalFrames = 166,
   frameFolder = "/frames_final",
+  filePrefix = "frame-",
+  digits = 4,
   triggerSelector = "#canvas-scroll-container",
+  startTrigger = "top top",
+  endTrigger = "bottom bottom",
+  parallaxStartY = 0,
+  parallaxEndY = 8,
+  scaleStart = 1.0,
+  scaleEnd = 1.06,
 }: FrameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const jiggleRef = useRef<HTMLDivElement | null>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const lastDrawnFrameRef = useRef<number>(0);
   const [initialFrameLoaded, setInitialFrameLoaded] = useState(false);
 
   const getFramePath = (index: number) => {
-    const frameNum = String(index + 1).padStart(4, "0");
-    return `${frameFolder}/frame-${frameNum}.jpg`;
+    const frameNum = String(index + 1).padStart(digits, "0");
+    return `${frameFolder}/${filePrefix}${frameNum}.jpg`;
   };
 
   useEffect(() => {
@@ -133,12 +150,12 @@ export default function FrameCanvas({
     let parallaxTween: gsap.core.Tween | null = null;
 
     if (triggerEl) {
-      // Scrub frames 0 -> 165, reaching 100% when Partners is fully visible on screen
+      // Scrub frames across start and end boundaries with instant bidirectional response
       scrollTriggerInstance = ScrollTrigger.create({
         trigger: triggerEl,
-        start: "top top",
-        end: "bottom bottom", // Finishes animation when Partners section is fully visible in the viewport
-        scrub: 0.5,
+        start: startTrigger,
+        end: endTrigger,
+        scrub: true,
         onUpdate: (self) => {
           const targetIndex = Math.round(self.progress * (totalFrames - 1));
           renderFrame(targetIndex);
@@ -147,23 +164,68 @@ export default function FrameCanvas({
 
       // Subtle luxury parallax depth motion as you scroll down
       if (canvasRef.current) {
-        parallaxTween = gsap.to(canvasRef.current, {
-          yPercent: 8,
-          scale: 1.06,
-          ease: "none",
-          scrollTrigger: {
-            trigger: triggerEl,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 1,
+        parallaxTween = gsap.fromTo(
+          canvasRef.current,
+          {
+            yPercent: parallaxStartY,
+            scale: scaleStart,
           },
-        });
+          {
+            yPercent: parallaxEndY,
+            scale: scaleEnd,
+            ease: "none",
+            scrollTrigger: {
+              trigger: triggerEl,
+              start: startTrigger,
+              end: endTrigger,
+              scrub: 1,
+            },
+          }
+        );
       }
     }
+
+    // 6. Smooth Luxury Floating & Tilt on Hover (No sudden spring snaps)
+    const jiggleWrapper = jiggleRef.current;
+
+    const handlePointerMove = (e: MouseEvent) => {
+      if (!jiggleWrapper) return;
+
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      const normX = (e.clientX - cx) / cx; // -1 to +1
+      const normY = (e.clientY - cy) / cy; // -1 to +1
+      const dist = Math.sqrt(normX * normX + normY * normY);
+
+      // Smooth subtle floating inertia when hovering near the center/disc area
+      if (dist < 0.85) {
+        gsap.to(jiggleWrapper, {
+          x: normX * 12,
+          y: normY * 12,
+          rotation: normX * 1.2,
+          duration: 0.9,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+      } else {
+        // Silky smooth return to rest
+        gsap.to(jiggleWrapper, {
+          x: 0,
+          y: 0,
+          rotation: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+      }
+    };
+
+    window.addEventListener("mousemove", handlePointerMove, { passive: true });
 
     return () => {
       isDestroyed = true;
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handlePointerMove);
       if (scrollTriggerInstance) {
         scrollTriggerInstance.kill();
       }
@@ -172,18 +234,31 @@ export default function FrameCanvas({
         parallaxTween.kill();
       }
     };
-  }, [totalFrames, frameFolder, triggerSelector]);
+  }, [
+    totalFrames,
+    frameFolder,
+    filePrefix,
+    digits,
+    triggerSelector,
+    startTrigger,
+    endTrigger,
+    parallaxStartY,
+    parallaxEndY,
+    scaleStart,
+    scaleEnd,
+  ]);
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0">
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden pointer-events-none">
-        {/* 2D Canvas */}
-        <canvas
-          ref={canvasRef}
-          className={`w-full h-full object-cover transition-opacity duration-700 ${
-            initialFrameLoaded ? "opacity-100" : "opacity-0"
-          }`}
-        />
+        {/* Interactive Jiggle & Tilt Wrapper */}
+        <div ref={jiggleRef} className="w-full h-full will-change-transform">
+          {/* 2D Canvas */}
+          <canvas
+            ref={canvasRef}
+            className="w-full h-full object-cover will-change-transform"
+          />
+        </div>
       </div>
     </div>
   );

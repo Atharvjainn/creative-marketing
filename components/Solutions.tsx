@@ -48,8 +48,8 @@ export default async function Solutions() {
       : "https://files.peachworlds.com/website/2f46c3a8-f9be-44cf-b56b-5a631f4fa3f7/dash.png";
 
   return (
-    <section id="solutions" className="relative pt-16 md:pt-24 pb-12">
-      {/* Frosted glass card */}
+    <section id="solutions" className="relative pt-16 md:pt-24 pb-16">
+      {/* Unified frosted glass container for all Solutions content + Dashboard mockup */}
       <div className="relative z-10 max-w-[1400px] mx-auto px-6">
         <Reveal direction="up" duration={800}>
           <div
@@ -63,7 +63,8 @@ export default async function Solutions() {
             {/* Subtle top ambient line */}
             <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
 
-            <div className="px-8 md:px-14 py-16 md:py-24">
+            {/* Header Content & Actions */}
+            <div className="px-8 md:px-14 pt-14 md:pt-20 pb-10 md:pb-12">
               <p className="section-label text-orange-400/90 mb-5">
                 {eyebrow}
               </p>
@@ -104,33 +105,31 @@ export default async function Solutions() {
                 </a>
               </div>
             </div>
-          </div>
-        </Reveal>
-      </div>
 
-      {/* Dashboard mockup with macOS Browser Window Frame */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 pb-20 md:pb-28 mt-12">
-        <Reveal direction="zoom" delay={200} duration={900}>
-          <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-black/80 shadow-2xl shadow-orange-950/50 group hover:border-orange-500/30 transition-all duration-500">
-            {/* macOS window titlebar */}
-            <div className="flex items-center gap-2 px-4 py-3 bg-neutral-900/90 border-b border-white/10">
-              <span className="w-3 h-3 rounded-full bg-[#FF5F56] inline-block shadow-sm" />
-              <span className="w-3 h-3 rounded-full bg-[#FFBD2E] inline-block shadow-sm" />
-              <span className="w-3 h-3 rounded-full bg-[#27C93F] inline-block shadow-sm" />
-              <div className="mx-auto w-1/3 max-w-xs h-5 rounded-md bg-white/5 border border-white/10 flex items-center justify-center text-[11px] text-white/40 font-mono">
-                creativemarketing.ai/dashboard
+            {/* Embedded Dashboard Mockup inside the same glassmorphism card */}
+            <div className="px-6 md:px-12 pb-8 md:pb-12">
+              <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-black/80 shadow-2xl shadow-black/60 group hover:border-orange-500/30 transition-all duration-500">
+                {/* macOS window titlebar */}
+                <div className="flex items-center gap-2 px-4 py-3 bg-neutral-900/90 border-b border-white/10">
+                  <span className="w-3 h-3 rounded-full bg-[#FF5F56] inline-block shadow-sm" />
+                  <span className="w-3 h-3 rounded-full bg-[#FFBD2E] inline-block shadow-sm" />
+                  <span className="w-3 h-3 rounded-full bg-[#27C93F] inline-block shadow-sm" />
+                  <div className="mx-auto w-1/3 max-w-xs h-5 rounded-md bg-white/5 border border-white/10 flex items-center justify-center text-[11px] text-white/40 font-mono">
+                    creativemarketing.ai/dashboard
+                  </div>
+                </div>
+
+                <div className="overflow-hidden">
+                  <Image
+                    src={dashImage}
+                    alt="Marketing Dashboard"
+                    width={1280}
+                    height={720}
+                    className="w-full h-auto object-cover group-hover:scale-[1.01] transition-transform duration-500"
+                    priority
+                  />
+                </div>
               </div>
-            </div>
-
-            <div className="overflow-hidden">
-              <Image
-                src={dashImage}
-                alt="Marketing Dashboard"
-                width={1280}
-                height={720}
-                className="w-full h-auto object-cover group-hover:scale-[1.01] transition-transform duration-500"
-                priority
-              />
             </div>
           </div>
         </Reveal>
