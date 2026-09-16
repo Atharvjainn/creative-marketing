@@ -20,6 +20,8 @@ interface FrameCanvasProps {
   parallaxEndY?: number;
   scaleStart?: number;
   scaleEnd?: number;
+  enableBlurFocus?: boolean;
+  blurAmount?: number;
 }
 
 export default function FrameCanvas({
@@ -34,9 +36,10 @@ export default function FrameCanvas({
   parallaxEndY = 8,
   scaleStart = 1.0,
   scaleEnd = 1.06,
+  enableBlurFocus = false,
+  blurAmount = 3.5,
 }: FrameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const jiggleRef = useRef<HTMLDivElement | null>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const lastDrawnFrameRef = useRef<number>(0);
   const [initialFrameLoaded, setInitialFrameLoaded] = useState(false);
@@ -119,6 +122,7 @@ export default function FrameCanvas({
       imagesRef.current[0] = firstImg;
       setInitialFrameLoaded(true);
       drawImageCover(firstImg);
+      ScrollTrigger.refresh();
     };
     imagesRef.current[0] = firstImg;
 
@@ -149,6 +153,10 @@ export default function FrameCanvas({
     let scrollTriggerInstance: ScrollTrigger | null = null;
     let parallaxTween: gsap.core.Tween | null = null;
 
+    if (canvasRef.current && enableBlurFocus) {
+      gsap.set(canvasRef.current, { filter: `blur(${blurAmount}px)` });
+    }
+
     if (triggerEl) {
       // Scrub frames across start and end boundaries with instant bidirectional response
       scrollTriggerInstance = ScrollTrigger.create({
@@ -159,6 +167,16 @@ export default function FrameCanvas({
         onUpdate: (self) => {
           const targetIndex = Math.round(self.progress * (totalFrames - 1));
           renderFrame(targetIndex);
+
+          // Clear blur as soon as user scrolls down
+          if (enableBlurFocus && canvasRef.current && self.progress > 0.02) {
+            gsap.to(canvasRef.current, {
+              filter: "blur(0px)",
+              duration: 0.4,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          }
         },
       });
 
@@ -185,47 +203,46 @@ export default function FrameCanvas({
       }
     }
 
-    // 6. Smooth Luxury Floating & Tilt on Hover (No sudden spring snaps)
-    const jiggleWrapper = jiggleRef.current;
+    // 6. Disc Blur Focus on Hover (Hero section only)
+    let handlePointerMove: ((e: MouseEvent) => void) | null = null;
 
-    const handlePointerMove = (e: MouseEvent) => {
-      if (!jiggleWrapper) return;
+    if (enableBlurFocus && canvasRef.current) {
+      handlePointerMove = (e: MouseEvent) => {
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        const normX = (e.clientX - cx) / cx; // -1 to +1
+        const normY = (e.clientY - cy) / cy; // -1 to +1
+        const dist = Math.sqrt(normX * normX + normY * normY);
 
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      const normX = (e.clientX - cx) / cx; // -1 to +1
-      const normY = (e.clientY - cy) / cy; // -1 to +1
-      const dist = Math.sqrt(normX * normX + normY * normY);
+        const currentProgress = scrollTriggerInstance?.progress || 0;
+        if (currentProgress < 0.03) {
+          if (dist < 0.75) {
+            gsap.to(canvasRef.current, {
+              filter: "blur(0px)",
+              duration: 0.5,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          } else {
+            gsap.to(canvasRef.current, {
+              filter: `blur(${blurAmount}px)`,
+              duration: 0.8,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          }
+        }
+      };
 
-      // Smooth subtle floating inertia when hovering near the center/disc area
-      if (dist < 0.85) {
-        gsap.to(jiggleWrapper, {
-          x: normX * 12,
-          y: normY * 12,
-          rotation: normX * 1.2,
-          duration: 0.9,
-          ease: "power3.out",
-          overwrite: "auto",
-        });
-      } else {
-        // Silky smooth return to rest
-        gsap.to(jiggleWrapper, {
-          x: 0,
-          y: 0,
-          rotation: 0,
-          duration: 1.2,
-          ease: "power3.out",
-          overwrite: "auto",
-        });
-      }
-    };
-
-    window.addEventListener("mousemove", handlePointerMove, { passive: true });
+      window.addEventListener("mousemove", handlePointerMove, { passive: true });
+    }
 
     return () => {
       isDestroyed = true;
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", handlePointerMove);
+      if (handlePointerMove) {
+        window.removeEventListener("mousemove", handlePointerMove);
+      }
       if (scrollTriggerInstance) {
         scrollTriggerInstance.kill();
       }
@@ -246,19 +263,23 @@ export default function FrameCanvas({
     parallaxEndY,
     scaleStart,
     scaleEnd,
+    enableBlurFocus,
+    blurAmount,
   ]);
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0">
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden pointer-events-none">
-        {/* Interactive Jiggle & Tilt Wrapper */}
-        <div ref={jiggleRef} className="w-full h-full will-change-transform">
-          {/* 2D Canvas */}
-          <canvas
-            ref={canvasRef}
-            className="w-full h-full object-cover will-change-transform"
-          />
-        </div>
+        {/* 2D Canvas */}
+        <canvas
+          ref={canvasRef}
+          style={
+            enableBlurFocus
+              ? { filter: `blur(${blurAmount}px)` }
+              : undefined
+          }
+          className="w-full h-full object-cover will-change-[transform,filter]"
+        />
       </div>
     </div>
   );

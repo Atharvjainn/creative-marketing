@@ -16,7 +16,27 @@ function ScrollTriggerSync() {
   });
 
   useEffect(() => {
-    ScrollTrigger.refresh();
+    const handleRefresh = () => {
+      ScrollTrigger.refresh();
+    };
+
+    window.addEventListener("load", handleRefresh);
+    window.addEventListener("resize", handleRefresh);
+    if (typeof document !== "undefined" && document.fonts) {
+      document.fonts.ready.then(handleRefresh).catch(() => {});
+    }
+
+    const t1 = setTimeout(handleRefresh, 150);
+    const t2 = setTimeout(handleRefresh, 600);
+    const t3 = setTimeout(handleRefresh, 1800);
+
+    return () => {
+      window.removeEventListener("load", handleRefresh);
+      window.removeEventListener("resize", handleRefresh);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
   }, []);
 
   return null;

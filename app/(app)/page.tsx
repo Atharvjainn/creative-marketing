@@ -24,6 +24,8 @@ export default function Home() {
           totalFrames={166}
           frameFolder="/frames_final"
           triggerSelector="#canvas-scroll-container"
+          enableBlurFocus={true}
+          blurAmount={3.5}
         />
         <div className="relative z-10">
           <Hero />
@@ -63,14 +65,14 @@ export default function Home() {
       <Pricing />
 
       {/* Footer Frame Sequence: CTA & Footer */}
-      <div id="footer-canvas-scroll-container" className="relative min-h-[160vh]">
+      <div id="footer-canvas-scroll-container" className="relative min-h-[250vh] md:min-h-[280vh]">
         <FrameCanvas
           totalFrames={104}
           frameFolder="/frames_footer"
           filePrefix="frame"
           digits={8}
           triggerSelector="#footer-canvas-scroll-container"
-          startTrigger="top 75%"
+          startTrigger="top center"
           endTrigger="bottom bottom"
         />
         <div className="sticky top-0 min-h-screen flex items-center justify-center relative z-10">
