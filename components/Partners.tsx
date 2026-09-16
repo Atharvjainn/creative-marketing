@@ -33,17 +33,17 @@ export default async function Partners() {
   const partners =
     data?.partners && data.partners.length > 0
       ? data.partners
-          .map((p) => {
-            let logoUrl = "";
-            if (typeof p.logo === "object" && p.logo && "url" in p.logo && typeof p.logo.url === "string") {
-              logoUrl = p.logo.url;
-            }
-            return {
-              name: p.name || "",
-              logo: logoUrl || defaultPartners[0].logo,
-            };
-          })
-          .filter((p) => p.name && p.logo)
+        .map((p) => {
+          let logoUrl = "";
+          if (typeof p.logo === "object" && p.logo && "url" in p.logo && typeof p.logo.url === "string") {
+            logoUrl = p.logo.url;
+          }
+          return {
+            name: p.name || "",
+            logo: logoUrl || defaultPartners[0].logo,
+          };
+        })
+        .filter((p) => p.name && p.logo)
       : defaultPartners;
 
   // Duplicate the partner array to create a seamless infinite marquee loop
@@ -51,9 +51,9 @@ export default async function Partners() {
 
   const bgImage =
     typeof data?.backgroundImage === "object" &&
-    data.backgroundImage &&
-    "url" in data.backgroundImage &&
-    typeof data.backgroundImage.url === "string"
+      data.backgroundImage &&
+      "url" in data.backgroundImage &&
+      typeof data.backgroundImage.url === "string"
       ? data.backgroundImage.url
       : "https://files.peachworlds.com/website/ef3f779a-8b6a-4bd8-bcb9-0b77d639001a/chatgpt-image-jun-15-2026-08-59-34-pm.webp";
 
@@ -61,7 +61,7 @@ export default async function Partners() {
     <section id="partners" className="relative overflow-hidden py-24 md:py-32">
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12">
         <div className="text-center mb-14">
-          <p className="section-label text-orange-400/90 mb-3">{eyebrow}</p>
+          <p className="section-label text-white-400/90 mb-3">{eyebrow}</p>
           <h2
             className="text-white font-medium whitespace-pre-line tracking-tight"
             style={{ fontSize: "clamp(32px, 4.5vw, 56px)", lineHeight: 1.1 }}

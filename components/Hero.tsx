@@ -96,9 +96,13 @@ export default async function Hero() {
               </h1>
             </Reveal>
 
+
             {/* Social proof stack */}
             <Reveal direction="up" delay={300} duration={800}>
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+              <div className="mt-8 flex flex-wrap flex-col gap-2">
+                <div>
+                  <p className="text-white text-xl tracking-tight">{trustText}</p>
+                </div>
                 <div className="flex items-center">
                   {displayAvatars.map((src, i) => (
                     <div
@@ -128,13 +132,9 @@ export default async function Hero() {
                   )}
                 </div>
 
-                <div>
-                  <div className="flex items-center gap-1 text-amber-400 text-xs">
-                    {"★".repeat(5)}
-                    <span className="text-white text-xs font-semibold ml-1">4.9/5</span>
-                  </div>
-                  <p className="text-white/70 text-[13px] tracking-tight">{trustText}</p>
-                </div>
+                {/* <div>
+                  <p className="text-white text-xl tracking-tight">{trustText}</p>
+                </div> */}
               </div>
             </Reveal>
           </div>
@@ -145,10 +145,10 @@ export default async function Hero() {
               <p className="text-white/80 text-[16px] mb-8 leading-relaxed">
                 {description}
               </p>
-              <div className="flex items-center gap-3.5">
+              <div className="flex items-center gap-0.5">
                 <a
                   href={primaryButton.url}
-                  className="group flex items-center gap-2.5 bg-white text-black px-7 py-3.5 rounded-full text-[14px] font-semibold hover:bg-neutral-100 hover:shadow-xl hover:shadow-orange-500/25 hover:-translate-y-0.5 transition-all duration-200"
+                  className="group flex items-center gap-2.5 bg-white text-black px-5 py-3.5 rounded-sm text-[14px] font-semibold hover:bg-neutral-100 hover:shadow-xl hover:shadow-orange-500/25 hover:-translate-y-0.5 transition-all duration-200"
                 >
                   {primaryButton.label}
                   <span className="w-5 h-5 rounded-full bg-black flex items-center justify-center text-white text-xs transition-transform duration-200 group-hover:translate-x-1">
@@ -157,7 +157,7 @@ export default async function Hero() {
                 </a>
                 <a
                   href={secondaryButton.url}
-                  className="flex items-center gap-2 bg-white/10 text-white px-7 py-3.5 rounded-full text-[14px] font-medium hover:bg-white/20 hover:-translate-y-0.5 border border-white/15 transition-all duration-200 backdrop-blur-md"
+                  className="flex items-center gap-2 bg-white/10 text-white px-5 py-3.5 rounded-sm text-[14px] font-medium hover:bg-white/20 hover:-translate-y-0.5 border border-white/15 transition-all duration-200 backdrop-blur-md"
                 >
                   {secondaryButton.label}
                 </a>

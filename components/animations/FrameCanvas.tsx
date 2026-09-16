@@ -33,9 +33,9 @@ export default function FrameCanvas({
   startTrigger = "top top",
   endTrigger = "bottom bottom",
   parallaxStartY = 0,
-  parallaxEndY = 8,
+  parallaxEndY = 0,
   scaleStart = 1.0,
-  scaleEnd = 1.06,
+  scaleEnd = 1.04,
   enableBlurFocus = false,
   blurAmount = 3.5,
 }: FrameCanvasProps) {

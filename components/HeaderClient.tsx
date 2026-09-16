@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface HeaderClientProps {
   brandName: string;
@@ -13,36 +13,11 @@ export default function HeaderClient({
   navigation,
   cta,
 }: HeaderClientProps) {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", onScroll);
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
   return (
-    <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-      style={{
-        background: scrolled
-          ? "rgba(10, 2, 0, 0.88)"
-          : "transparent",
-        backdropFilter: scrolled ? "blur(16px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
-        borderBottom: scrolled
-          ? "1px solid rgba(255,255,255,0.08)"
-          : "1px solid transparent",
-      }}
-    >
-      <div className="w-full flex items-center justify-between px-8 py-5">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent transition-colors duration-300">
+      <div className="max-w-[1400px] w-full mx-auto flex items-center justify-between px-6 py-5">
         {/* Logo */}
         <a
           href="#"
