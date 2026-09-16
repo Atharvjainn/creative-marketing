@@ -6,19 +6,27 @@ const defaultNav = [
   { label: "Features", url: "#features" },
   { label: "AI Power", url: "#ai-power" },
   { label: "Pricing", url: "#pricing" },
-  { label: "Blog", url: "/blog" },
 ];
 
 export default async function Header() {
-  // Fetch the "Header" global directly from Payload with depth 2
   const data = await getPayloadClient()
-    .then((payload) => payload.findGlobal({ slug: "header", depth: 2 }))
+    .then((payload) =>
+      payload.findGlobal({
+        slug: "header",
+        depth: 2,
+      })
+    )
     .catch((err) => {
-      console.error("Failed to load 'header' global from Payload:", err);
+      console.error(
+        "Failed to load 'header' global from Payload:",
+        err
+      );
+
       return null;
     });
 
-  const brandName = data?.brandName || "Creative Marketing Agency";
+  const brandName =
+    data?.brandName || "Creative Marketing Agency";
 
   const navigation =
     data?.navigation && data.navigation.length > 0

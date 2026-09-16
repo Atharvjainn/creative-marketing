@@ -17,103 +17,218 @@ export default function HeaderClient({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
-        background: scrolled ? "rgba(10, 2, 0, 0.88)" : "transparent",
+        background: scrolled
+          ? "rgba(10, 2, 0, 0.88)"
+          : "transparent",
         backdropFilter: scrolled ? "blur(16px)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
         borderBottom: scrolled
-          ? "1px solid rgba(255, 255, 255, 0.08)"
+          ? "1px solid rgba(255,255,255,0.08)"
           : "1px solid transparent",
       }}
     >
-      <div
-        className="max-w-[1400px] w-full flex items-center justify-between mx-auto px-6 py-4"
-      >
+      <div className="w-full flex items-center justify-between px-8 py-5">
         {/* Logo */}
         <a
           href="#"
-          className="text-white text-[15px] font-semibold tracking-tight hover:opacity-90 transition-opacity flex items-center gap-2"
+          className="
+            text-white
+            text-[22px]
+            font-medium
+            tracking-[-0.03em]
+            leading-none
+            hover:opacity-90
+            transition-opacity
+          "
         >
-          <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
           {brandName}
         </a>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        {/* Desktop Navigation */}
+        <nav
+          className="
+            hidden md:flex
+            items-center
+            rounded-[18px]
+            overflow-hidden
+            bg-white/[0.12]
+            backdrop-blur-sm
+            border border-white/[0.0]
+          "
+        >
           {navigation.map((item) => (
             <a
               key={item.label}
               href={item.url}
-              className="text-white/80 text-[14px] hover:text-white transition-all duration-200 relative group py-1"
+              className="
+                px-6
+                py-4
+                text-white
+                text-[14px]
+                font-normal
+                whitespace-nowrap
+                transition-colors
+                duration-300
+                hover:bg-white/[0.08]
+              "
             >
               {item.label}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-500 transition-all duration-200 group-hover:w-full" />
             </a>
           ))}
+
+          {/* CTA */}
           <a
             href={cta.url}
-            className="group flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-full text-[14px] font-medium hover:bg-neutral-100 hover:shadow-lg hover:shadow-orange-500/10 transition-all duration-200"
+            className="
+              group
+              flex
+              items-center
+              gap-3
+              mr-1
+              my-1
+              px-6
+              py-3
+              rounded-[14px]
+              bg-black
+              text-white
+              text-[14px]
+              font-medium
+              whitespace-nowrap
+              transition-transform
+              duration-300
+              hover:scale-[0.98]
+            "
           >
-            {cta.label}
-            <span className="w-5 h-5 rounded-full bg-black flex items-center justify-center text-white text-xs font-bold transition-transform duration-200 group-hover:translate-x-0.5">
-              ›
+            <span>{cta.label}</span>
+
+            <span
+              className="
+                flex
+                items-center
+                justify-center
+                w-6
+                h-6
+                rounded-full
+                bg-white
+                text-black
+                text-[15px]
+                leading-none
+                transition-transform
+                duration-300
+                group-hover:translate-x-0.5
+              "
+            >
+              →
             </span>
           </a>
         </nav>
 
-        {/* Mobile hamburger */}
+        {/* Mobile Hamburger */}
         <button
-          className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
+          className="
+            md:hidden
+            text-white
+            p-2
+            rounded-lg
+            hover:bg-white/10
+            transition-colors
+          "
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}
         >
           <div
-            className={`w-6 h-0.5 bg-white transition-all duration-300 ${
-              mobileOpen ? "rotate-45 translate-y-2" : "mb-1.5"
-            }`}
+            className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen
+              ? "rotate-45 translate-y-2"
+              : "mb-1.5"
+              }`}
           />
+
           <div
-            className={`w-6 h-0.5 bg-white transition-all duration-300 ${
-              mobileOpen ? "opacity-0" : "mb-1.5"
-            }`}
+            className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen
+              ? "opacity-0"
+              : "mb-1.5"
+              }`}
           />
+
           <div
-            className={`w-6 h-0.5 bg-white transition-all duration-300 ${
-              mobileOpen ? "-rotate-45 -translate-y-2" : ""
-            }`}
+            className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen
+              ? "-rotate-45 -translate-y-2"
+              : ""
+              }`}
           />
         </button>
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-black/95 backdrop-blur-2xl border-b border-white/10 px-6 py-8 flex flex-col gap-5 animate-fadeInUp">
+        <div
+          className="
+            md:hidden
+            bg-black/95
+            backdrop-blur-2xl
+            border-b
+            border-white/10
+            px-6
+            py-8
+            flex
+            flex-col
+            gap-5
+          "
+        >
           {navigation.map((item) => (
             <a
               key={item.label}
               href={item.url}
-              className="text-white/90 hover:text-white text-[17px] font-medium transition-colors"
+              className="
+                text-white/90
+                hover:text-white
+                text-[16px]
+                font-medium
+                transition-colors
+              "
               onClick={() => setMobileOpen(false)}
             >
               {item.label}
             </a>
           ))}
+
           <div className="pt-4 border-t border-white/10">
             <a
               href={cta.url}
-              className="inline-flex items-center justify-center gap-2 bg-white text-black px-6 py-3 rounded-full text-[15px] font-medium w-full shadow-lg shadow-orange-500/10"
+              className="
+                inline-flex
+                items-center
+                justify-center
+                gap-2
+                bg-white
+                text-black
+                px-6
+                py-3
+                rounded-full
+                text-[14px]
+                font-medium
+                w-full
+              "
               onClick={() => setMobileOpen(false)}
             >
-              {cta.label} ›
+              {cta.label}
+              <span>→</span>
             </a>
           </div>
         </div>
