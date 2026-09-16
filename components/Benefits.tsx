@@ -44,27 +44,6 @@ export default async function Benefits() {
 
   return (
     <section id="benefits" className="relative overflow-hidden py-20 md:py-28">
-      {/* Warm orange gradient background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 55% 50%, #C04010 0%, #8B2A06 35%, #3D0E00 65%, #0D0100 100%)",
-        }}
-      />
-
-      {/* Disc image overlay - center */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "65%",
-          backgroundPosition: "62% center",
-          backgroundRepeat: "no-repeat",
-          opacity: 0.4,
-        }}
-      />
-
       <div className="relative z-10 max-w-[1320px] mx-auto px-8 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left text */}

@@ -11,12 +11,14 @@ if (typeof window !== "undefined") {
 interface FrameCanvasProps {
   totalFrames?: number;
   frameFolder?: string;
+  filePrefix?: string;
   triggerSelector?: string;
 }
 
 export default function FrameCanvas({
   totalFrames = 166,
   frameFolder = "/frames_final",
+  filePrefix = "frame-",
   triggerSelector = "#canvas-scroll-container",
 }: FrameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -27,7 +29,7 @@ export default function FrameCanvas({
 
   const getFramePath = (index: number) => {
     const frameNum = String(index + 1).padStart(4, "0");
-    return `${frameFolder}/frame-${frameNum}.jpg`;
+    return `${frameFolder}/${filePrefix}${frameNum}.jpg`;
   };
 
   useEffect(() => {
@@ -211,7 +213,7 @@ export default function FrameCanvas({
         parallaxTween.kill();
       }
     };
-  }, [totalFrames, frameFolder, triggerSelector]);
+  }, [totalFrames, frameFolder, filePrefix, triggerSelector]);
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0">

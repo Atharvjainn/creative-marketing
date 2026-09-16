@@ -36,11 +36,25 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Subsequent Website Sections */}
+      {/* Intermediary Feature Highlights */}
       <Features />
       <KeyFeatures />
-      <BusinessSolutions />
-      <Benefits />
+
+      {/* Middle Frame Sequence: Business Solutions & Benefits */}
+      <div id="middle-canvas-scroll-container" className="relative">
+        <FrameCanvas
+          totalFrames={135}
+          frameFolder="/frames_middle"
+          filePrefix="frame"
+          triggerSelector="#middle-canvas-scroll-container"
+        />
+        <div className="relative z-10">
+          <BusinessSolutions />
+          <Benefits />
+        </div>
+      </div>
+
+      {/* Subsequent Website Sections */}
       <Testimonials />
       <Pricing />
       <CTA />
