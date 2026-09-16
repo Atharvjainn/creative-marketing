@@ -25,7 +25,10 @@ export default async function Partners() {
   if (data?.enabled === false) return null;
 
   const eyebrow = data?.eyebrow || "OUR PARTNERS";
-  const heading = data?.heading || "Collaborating with\nleading brands worldwide.";
+  let heading = data?.heading || "Collaborating with\nleading brands\nworldwide.";
+  if (!heading.includes("\n") && heading.toLowerCase().includes("leading brands") && heading.toLowerCase().includes("worldwide")) {
+    heading = heading.replace(/leading brands/i, "\nleading brands").replace(/worldwide/i, "\nworldwide");
+  }
 
   const partners =
     data?.partners && data.partners.length > 0

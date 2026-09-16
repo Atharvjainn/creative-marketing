@@ -20,6 +20,7 @@ export default function FrameCanvas({
   triggerSelector = "#canvas-scroll-container",
 }: FrameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const jiggleRef = useRef<HTMLDivElement | null>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const lastDrawnFrameRef = useRef<number>(0);
   const [initialFrameLoaded, setInitialFrameLoaded] = useState(false);
@@ -161,9 +162,47 @@ export default function FrameCanvas({
       }
     }
 
+    // 6. Smooth Luxury Floating & Tilt on Hover (No sudden spring snaps)
+    const jiggleWrapper = jiggleRef.current;
+
+    const handlePointerMove = (e: MouseEvent) => {
+      if (!jiggleWrapper) return;
+
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      const normX = (e.clientX - cx) / cx; // -1 to +1
+      const normY = (e.clientY - cy) / cy; // -1 to +1
+      const dist = Math.sqrt(normX * normX + normY * normY);
+
+      // Smooth subtle floating inertia when hovering near the center/disc area
+      if (dist < 0.85) {
+        gsap.to(jiggleWrapper, {
+          x: normX * 12,
+          y: normY * 12,
+          rotation: normX * 1.2,
+          duration: 0.9,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+      } else {
+        // Silky smooth return to rest
+        gsap.to(jiggleWrapper, {
+          x: 0,
+          y: 0,
+          rotation: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+      }
+    };
+
+    window.addEventListener("mousemove", handlePointerMove, { passive: true });
+
     return () => {
       isDestroyed = true;
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handlePointerMove);
       if (scrollTriggerInstance) {
         scrollTriggerInstance.kill();
       }
@@ -177,13 +216,16 @@ export default function FrameCanvas({
   return (
     <div className="absolute inset-0 pointer-events-none z-0">
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden pointer-events-none">
-        {/* 2D Canvas */}
-        <canvas
-          ref={canvasRef}
-          className={`w-full h-full object-cover transition-opacity duration-700 ${
-            initialFrameLoaded ? "opacity-100" : "opacity-0"
-          }`}
-        />
+        {/* Interactive Jiggle & Tilt Wrapper */}
+        <div ref={jiggleRef} className="w-full h-full will-change-transform">
+          {/* 2D Canvas */}
+          <canvas
+            ref={canvasRef}
+            className={`w-full h-full object-cover transition-opacity duration-700 ${
+              initialFrameLoaded ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        </div>
       </div>
     </div>
   );
