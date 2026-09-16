@@ -69,11 +69,11 @@ export default async function BusinessSolutions() {
       : "https://files.peachworlds.com/website/351c33a9-2727-4ead-96ba-0e84a1dfccfd/chatgpt-image-jun-15-2026-09-04-22-pm.webp";
 
   return (
-    <section id="business-solutions" className="relative overflow-hidden py-24 md:py-36">
+    <section id="business-solutions" className="relative py-24 md:py-36">
       <div className="relative z-10 max-w-[1320px] mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-start">
           {/* Left sticky heading column - stays pinned while right cards scroll past */}
-          <div className="lg:sticky lg:top-36 lg:self-start">
+          <div className="lg:sticky lg:top-28 lg:self-start">
             <Reveal direction="up" delay={50}>
               <p className="section-label text-orange-400 mb-4">{eyebrow}</p>
             </Reveal>
@@ -92,8 +92,8 @@ export default async function BusinessSolutions() {
             </Reveal>
           </div>
 
-          {/* Right scrolling adaptive cards */}
-          <div className="flex flex-col gap-6">
+          {/* Right scrolling adaptive cards - unpinned, scroll naturally */}
+          <div className="flex flex-col gap-7 md:gap-8">
             {items.map((sol, i) => (
               <Reveal
                 key={`${sol.title}-${i}`}

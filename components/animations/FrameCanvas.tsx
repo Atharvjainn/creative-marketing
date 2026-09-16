@@ -12,14 +12,28 @@ interface FrameCanvasProps {
   totalFrames?: number;
   frameFolder?: string;
   filePrefix?: string;
+  digits?: number;
   triggerSelector?: string;
+  startTrigger?: string;
+  endTrigger?: string;
+  parallaxStartY?: number;
+  parallaxEndY?: number;
+  scaleStart?: number;
+  scaleEnd?: number;
 }
 
 export default function FrameCanvas({
   totalFrames = 166,
   frameFolder = "/frames_final",
   filePrefix = "frame-",
+  digits = 4,
   triggerSelector = "#canvas-scroll-container",
+  startTrigger = "top top",
+  endTrigger = "bottom bottom",
+  parallaxStartY = 0,
+  parallaxEndY = 8,
+  scaleStart = 1.0,
+  scaleEnd = 1.06,
 }: FrameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const jiggleRef = useRef<HTMLDivElement | null>(null);
@@ -28,7 +42,7 @@ export default function FrameCanvas({
   const [initialFrameLoaded, setInitialFrameLoaded] = useState(false);
 
   const getFramePath = (index: number) => {
-    const frameNum = String(index + 1).padStart(4, "0");
+    const frameNum = String(index + 1).padStart(digits, "0");
     return `${frameFolder}/${filePrefix}${frameNum}.jpg`;
   };
 
@@ -136,12 +150,12 @@ export default function FrameCanvas({
     let parallaxTween: gsap.core.Tween | null = null;
 
     if (triggerEl) {
-      // Scrub frames 0 -> 165, reaching 100% when Partners is fully visible on screen
+      // Scrub frames across start and end boundaries with instant bidirectional response
       scrollTriggerInstance = ScrollTrigger.create({
         trigger: triggerEl,
-        start: "top top",
-        end: "bottom bottom", // Finishes animation when Partners section is fully visible in the viewport
-        scrub: 0.5,
+        start: startTrigger,
+        end: endTrigger,
+        scrub: true,
         onUpdate: (self) => {
           const targetIndex = Math.round(self.progress * (totalFrames - 1));
           renderFrame(targetIndex);
@@ -150,17 +164,24 @@ export default function FrameCanvas({
 
       // Subtle luxury parallax depth motion as you scroll down
       if (canvasRef.current) {
-        parallaxTween = gsap.to(canvasRef.current, {
-          yPercent: 8,
-          scale: 1.06,
-          ease: "none",
-          scrollTrigger: {
-            trigger: triggerEl,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 1,
+        parallaxTween = gsap.fromTo(
+          canvasRef.current,
+          {
+            yPercent: parallaxStartY,
+            scale: scaleStart,
           },
-        });
+          {
+            yPercent: parallaxEndY,
+            scale: scaleEnd,
+            ease: "none",
+            scrollTrigger: {
+              trigger: triggerEl,
+              start: startTrigger,
+              end: endTrigger,
+              scrub: 1,
+            },
+          }
+        );
       }
     }
 
@@ -213,7 +234,19 @@ export default function FrameCanvas({
         parallaxTween.kill();
       }
     };
-  }, [totalFrames, frameFolder, filePrefix, triggerSelector]);
+  }, [
+    totalFrames,
+    frameFolder,
+    filePrefix,
+    digits,
+    triggerSelector,
+    startTrigger,
+    endTrigger,
+    parallaxStartY,
+    parallaxEndY,
+    scaleStart,
+    scaleEnd,
+  ]);
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0">
@@ -223,9 +256,7 @@ export default function FrameCanvas({
           {/* 2D Canvas */}
           <canvas
             ref={canvasRef}
-            className={`w-full h-full object-cover transition-opacity duration-700 ${
-              initialFrameLoaded ? "opacity-100" : "opacity-0"
-            }`}
+            className="w-full h-full object-cover will-change-transform"
           />
         </div>
       </div>
