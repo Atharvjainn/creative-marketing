@@ -42,7 +42,6 @@ export default function BlogListClient({
   categories,
 }: BlogListClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const filteredBlogs = useMemo(() => {
     return initialBlogs.filter((blog) => {
@@ -53,22 +52,17 @@ export default function BlogListClient({
           ? blog.category
           : "General";
 
-      const matchesCategory =
+      return (
         selectedCategory === "All" ||
-        catTitle.toLowerCase() === selectedCategory.toLowerCase();
-
-      const matchesSearch =
-        !searchQuery.trim() ||
-        blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (blog.excerpt && blog.excerpt.toLowerCase().includes(searchQuery.toLowerCase()));
-
-      return matchesCategory && matchesSearch;
+        catTitle.toLowerCase() === selectedCategory.toLowerCase()
+      );
     });
-  }, [initialBlogs, selectedCategory, searchQuery]);
+  }, [initialBlogs, selectedCategory]);
 
-  const featuredBlog = filteredBlogs.length > 0 && selectedCategory === "All" && !searchQuery.trim()
-    ? filteredBlogs[0]
-    : null;
+  const featuredBlog =
+    filteredBlogs.length > 0 && selectedCategory === "All"
+      ? filteredBlogs[0]
+      : null;
 
   const standardBlogs = featuredBlog
     ? filteredBlogs.slice(1)
@@ -112,10 +106,9 @@ export default function BlogListClient({
 
   return (
     <div className="w-full">
-      {/* Category Pills & Search Bar */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 mb-14 pb-8 border-b border-white/[0.08]">
-        {/* Category Filters */}
-        <div className="flex items-center gap-2.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+      {/* Category Pills (Centered & Streamlined) */}
+      {categories.length > 0 && (
+        <div className="flex items-center justify-center gap-2.5 overflow-x-auto pb-4 mb-14 scrollbar-none">
           <button
             onClick={() => setSelectedCategory("All")}
             className={`px-5 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
@@ -140,39 +133,15 @@ export default function BlogListClient({
             </button>
           ))}
         </div>
+      )}
 
-        {/* Search Bar */}
-        <div className="relative min-w-[260px]">
-          <input
-            type="text"
-            placeholder="Search insights & topics..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-white/[0.04] border border-white/[0.1] focus:border-orange-500/50 rounded-full px-5 py-2.5 pl-11 text-xs text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
-          />
-          <svg
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
-      </div>
-
-      {/* Featured Blog Highlight (when viewing all and no search) */}
+      {/* Featured Blog Highlight (Top article) */}
       {featuredBlog && (
-        <div className="mb-16">
+        <div className="mb-14">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse" />
             <span className="text-[11px] font-bold text-orange-400 uppercase tracking-widest">
-              Featured Insight
+              Latest Insight
             </span>
           </div>
 
@@ -182,7 +151,7 @@ export default function BlogListClient({
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-6 sm:p-10">
               {/* Featured Image */}
-              <div className="lg:col-span-7 relative h-72 sm:h-96 rounded-2xl overflow-hidden">
+              <div className="lg:col-span-7 relative h-72 sm:h-96 rounded-2xl overflow-hidden bg-neutral-900">
                 <Image
                   src={getImageUrl(featuredBlog.featuredImage)}
                   alt={featuredBlog.title}
@@ -192,7 +161,7 @@ export default function BlogListClient({
                   priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                
+
                 {/* Category pill on image */}
                 <div className="absolute top-4 left-4">
                   <span className="px-3.5 py-1.5 rounded-full text-[11px] font-semibold tracking-wide bg-black/60 border border-white/20 text-white backdrop-blur-md">
@@ -245,9 +214,9 @@ export default function BlogListClient({
         </div>
       )}
 
-      {/* Grid of Articles */}
-      {standardBlogs.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+      {/* Grid of Remaining Articles (if any) */}
+      {standardBlogs.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {standardBlogs.map((blog) => (
             <Link
               key={blog.id}
@@ -264,7 +233,7 @@ export default function BlogListClient({
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                
+
                 {/* Category badge */}
                 <div className="absolute top-4 left-4">
                   <span className="px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase bg-black/60 border border-white/15 text-white/90 backdrop-blur-md">
@@ -314,66 +283,27 @@ export default function BlogListClient({
             </Link>
           ))}
         </div>
-      ) : (
-        <div className="py-24 text-center rounded-3xl bg-white/[0.02] border border-white/[0.08] mb-20">
+      )}
+
+      {/* Empty State when no blogs exist at all */}
+      {initialBlogs.length === 0 && (
+        <div className="py-24 text-center rounded-3xl bg-white/[0.02] border border-white/[0.08] mb-16">
           <div className="w-16 h-16 rounded-full bg-white/[0.05] flex items-center justify-center mx-auto mb-4 text-2xl">
             📰
           </div>
           <h3 className="text-xl font-semibold text-white mb-2">No articles found</h3>
           <p className="text-white/50 text-sm max-w-md mx-auto mb-6">
-            {searchQuery
-              ? `No articles match "${searchQuery}". Try a different search term or category.`
-              : "We're currently preparing insightful articles. Check back soon or browse categories."}
+            We're currently preparing insightful articles. You can publish articles from the CMS Admin.
           </p>
-          {(searchQuery || selectedCategory !== "All") && (
-            <button
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedCategory("All");
-              }}
-              className="px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-colors"
-            >
-              Reset Filters
-            </button>
-          )}
+          <a
+            href="/admin/collections/blogs"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-600 text-white text-xs font-semibold transition-all shadow-lg hover:scale-105"
+          >
+            <span>Go to Blog Admin</span>
+            <span>→</span>
+          </a>
         </div>
       )}
-
-      {/* Newsletter Subscription Card */}
-      <div className="relative rounded-3xl overflow-hidden p-8 sm:p-12 bg-gradient-to-r from-orange-950/40 via-neutral-900/60 to-black border border-orange-500/20 backdrop-blur-2xl text-center max-w-4xl mx-auto shadow-2xl">
-        <div className="relative z-10">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[11px] font-bold uppercase tracking-widest mb-4">
-            Weekly Dispatch
-          </span>
-          <h3 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-3">
-            Stay ahead with AI marketing insights
-          </h3>
-          <p className="text-white/60 text-xs sm:text-sm max-w-lg mx-auto mb-8 leading-relaxed">
-            Get exclusive teardowns, generative workflow breakdowns, and strategy playbooks delivered directly to your inbox.
-          </p>
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert("Thank you for subscribing to our dispatch!");
-            }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto"
-          >
-            <input
-              type="email"
-              required
-              placeholder="Enter your work email..."
-              className="w-full bg-white/[0.08] border border-white/15 focus:border-orange-500 rounded-full px-5 py-3 text-xs text-white placeholder-white/40 focus:outline-none transition-all"
-            />
-            <button
-              type="submit"
-              className="w-full sm:w-auto px-7 py-3 rounded-full bg-white text-black hover:bg-neutral-100 font-semibold text-xs whitespace-nowrap transition-all shadow-lg hover:scale-105"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </div>
     </div>
   );
 }

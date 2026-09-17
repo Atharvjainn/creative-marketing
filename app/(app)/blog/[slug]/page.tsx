@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .find({
       collection: "blogs",
       where: {
-        and: [{ slug: { equals: slug } }, { status: { equals: "published" } }],
+        slug: { equals: slug },
       },
       depth: 1,
       limit: 1,
@@ -65,7 +65,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
   const { docs } = await payload.find({
     collection: "blogs",
     where: {
-      and: [{ slug: { equals: slug } }, { status: { equals: "published" } }],
+      slug: { equals: slug },
     },
     depth: 2,
     limit: 1,
@@ -81,9 +81,9 @@ export default async function BlogDetailPage({ params }: PageProps) {
     .find({
       collection: "blogs",
       where: {
-        and: [{ status: { equals: "published" } }, { slug: { not_equals: slug } }],
+        slug: { not_equals: slug },
       },
-      sort: "-publishedDate",
+      sort: "-createdAt",
       depth: 2,
       limit: 3,
     })

@@ -23,8 +23,7 @@ export default async function BlogListPage() {
       ? payload
           .find({
             collection: "blogs",
-            where: { status: { equals: "published" } },
-            sort: "-publishedDate",
+            sort: "-createdAt",
             depth: 2,
             limit: 50,
           })
@@ -58,7 +57,10 @@ export default async function BlogListPage() {
   const formattedBlogs: BlogItem[] = rawBlogs.map((b) => {
     let catTitle = "AI Marketing";
     if (typeof b.category === "object" && b.category) {
-      catTitle = (b.category as { name?: string; title?: string }).name || (b.category as { name?: string; title?: string }).title || "General";
+      catTitle =
+        (b.category as { name?: string; title?: string }).name ||
+        (b.category as { name?: string; title?: string }).title ||
+        "General";
     }
 
     return {
@@ -74,6 +76,20 @@ export default async function BlogListPage() {
       tags: b.tags,
     };
   });
+
+  // Extract unique category names from both collection and blogs
+  const dynamicCategories = Array.from(
+    new Set([
+      ...categoryNames,
+      ...formattedBlogs
+        .map((b) =>
+          typeof b.category === "object" && b.category?.title
+            ? b.category.title
+            : ""
+        )
+        .filter(Boolean),
+    ])
+  );
 
   return (
     <main className="min-h-screen bg-[#070100] text-white selection:bg-orange-500/30 selection:text-white">
@@ -113,14 +129,10 @@ export default async function BlogListPage() {
           </Reveal>
         </div>
 
-        {/* Dynamic Client Blog List with Category Filters & Search */}
+        {/* Dynamic Client Blog List with Category Filters */}
         <BlogListClient
           initialBlogs={formattedBlogs}
-          categories={
-            categoryNames.length > 0
-              ? categoryNames
-              : ["AI Strategy", "Growth Engineering", "Generative Design", "Automation"]
-          }
+          categories={dynamicCategories}
         />
       </div>
     </main>
